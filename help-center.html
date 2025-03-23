@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Help Center</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background-color: #f5f9f8;
+        }
+
+        /* Header styles */
+        .header {
+            background-color: #4a4a4a;
+            color: white;
+            padding: 10px 20px;
+            display: flex;
+            align-items: center;
+        }
+
+        .header-logo {
+            height: 30px;
+            margin-right: 10px;
+        }
+
+        .header-title {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        /* Main layout */
+        .container {
+            display: flex;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 220px;
+            background-color: #e0eee8;
+            padding: 20px;
+        }
+
+        .sidebar-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .sidebar-nav {
+            list-style: none;
+        }
+
+        .sidebar-nav li {
+            margin-bottom: 10px;
+        }
+
+        .sidebar-nav a {
+            text-decoration: none;
+            color: #000000;
+            font-size: 14px;
+            display: block;
+            padding: 5px 0;
+        }
+
+        .sidebar-nav a:hover {
+            text-decoration: underline;
+        }
+
+        .sidebar-nav a.active {
+            font-weight: bold;
+        }
+
+        /* Main content */
+        .main-content {
+            flex: 1;
+            padding: 20px 30px;
+        }
+
+        .breadcrumb {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .breadcrumb a {
+            text-decoration: none;
+            color: #000000;
+        }
+
+        .search-bar {
+            display: flex;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 10px;
+            background-color: #fff;
+            margin-bottom: 25px;
+        }
+
+        .search-bar input {
+            flex: 1;
+            border: none;
+            outline: none;
+            font-size: 16px;
+            padding: 5px;
+        }
+
+        .page-title {
+            font-size: 28px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        /* Content Sections */
+        .content-section {
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            font-size: 22px;
+            color: #000000;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background-color: #e0eee8;
+            border-radius: 4px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+        }
+
+        .section-description {
+            font-size: 14px;
+            color: #444;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        /* FAQ Styles */
+        .faq-list {
+            list-style: none;
+            background-color: #fff;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .faq-item {
+            border-bottom: 1px solid #eee;
+        }
+
+        .faq-question {
+            padding: 15px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.2s;
+        }
+
+        .faq-question:hover {
+            background-color: #f5f5f5;
+        }
+
+        .faq-arrow {
+            font-size: 18px;
+            transition: transform 0.3s ease;
+        }
+
+        .faq-answer {
+            display: none;
+            padding: 15px;
+            font-size: 14px;
+            color: #444;
+            background-color: #f9f9f9;
+            border-top: 1px solid #eee;
+            line-height: 1.5;
+        }
+
+        .active .faq-arrow {
+            transform: rotate(90deg);
+        }
+
+        /* Tutorials Links */
+        .tutorial-links {
+            list-style: none;
+        }
+
+        .tutorial-links li {
+            margin-bottom: 12px;
+        }
+
+        .tutorial-links a {
+            display: flex;
+            align-items: center;
+            color: #0066a1;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .tutorial-links a:hover {
+            text-decoration: underline;
+        }
+
+        .tutorial-icon {
+            margin-right: 10px;
+            color: #7a9f35;
+        }
+
+        /* Contact Support */
+        .contact-support {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f0f5e5;
+            border-radius: 8px;
+            font-size: 14px;
+            color: #444;
+            line-height: 1.4;
+        }
+
+        .contact-support a {
+            color: #0066a1;
+            text-decoration: none;
+        }
+
+        .contact-support a:hover {
+            text-decoration: underline;
+        }
+
+        /* View all link */
+        .view-all {
+            display: block;
+            text-align: right;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #0066a1;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <span class="header-title">Help Center</span>
+    </div>
+
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-title">Help Center</div>
+            <ul class="sidebar-nav">
+                <li><a href="#" class="active">Answers & FAQs</a></li>
+                <li><a href="#">Contact Support</a></li>
+                <li><a href="Home.html">Home</a></li>
+            </ul>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <div class="breadcrumb">
+                <a href="help.html">Help Center</a> / 
+                <a href="help-center.html">Help & Support</a> / 
+                <span>My Account</span>
+            </div>
+
+            <div class="search-bar">
+                <input type="text" id="searchInput" placeholder="Search" onkeyup="searchFAQ()">
+            </div>
+
+            <h1 class="page-title">Help Center</h1>
+
+            <!-- FAQ Section -->
+            <div class="content-section">
+                <div class="section-title">
+                    <div class="section-icon">?</div>
+                    Frequently Asked Questions
+                </div>
+                
+                <div class="section-description">
+                    All questions that we receive regularly from our customers are covered in our FAQ pages, and you can browse through categories or do a keyword search to find the topic you need.
+                </div>
+
+                <ul class="faq-list">
+                    <li class="faq-item">
+                        <div class="faq-question">
+                            <span>Not able to access my account - My account is suspended/banned/disabled</span>
+                            <span class="faq-arrow">›</span>
+                        </div>
+                        <div class="faq-answer">If your account is suspended, please check your email for details. If you think this is a mistake, contact support.</div>
+                    </li>
+
+                    <li class="faq-item">
+                        <div class="faq-question">
+                            <span>Unable to login - Technical Issues</span>
+                            <span class="faq-arrow">›</span>
+                        </div>
+                        <div class="faq-answer">If you are facing login issues, try resetting your password or clearing browser cache.</div>
+                    </li>
+
+                    <li class="faq-item">
+                        <div class="faq-question">
+                            <span>How do I merge my two accounts?</span>
+                            <span class="faq-arrow">›</span>
+                        </div>
+                        <div class="faq-answer">Currently, account merging is not supported. You can contact customer support for assistance.</div>
+                    </li>
+
+                    <li class="faq-item">
+                        <div class="faq-question">
+                            <span>How to create an account?</span>
+                            <span class="faq-arrow">›</span>
+                        </div>
+                        <div class="faq-answer">To create an account, click on the 'Sign Up' button and enter your details.</div>
+                    </li>
+
+                    <li class="faq-item">
+                        <div class="faq-question">
+                            <span>What are the features of a Basic account?</span>
+                            <span class="faq-arrow">›</span>
+                        </div>
+                        <div class="faq-answer">Basic accounts include access to essential features like standard templates, basic analytics, and limited responses.</div>
+                    </li>
+                </ul>
+
+                <a href="#" class="view-all">View all »</a>
+            </div>
+
+            <!-- Tutorials Section -->
+            <div class="content-section">
+                <div class="section-title">
+                    <div class="section-icon">📖</div>
+                    Tutorials
+                </div>
+                
+                <div class="section-description">
+                    Our tutorials contain information on how to create an account, customize your profile, manage settings, and how to analyze your data.
+                </div>
+
+                <ul class="tutorial-links">
+                    <li>
+                        <a href="#">
+                            <span class="tutorial-icon">📄</span>
+                            How to create an account
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="tutorial-icon">📄</span>
+                            How to change my password
+                        </a>
+                    </li>
+                    <li>
+                        <a href="#">
+                            <span class="tutorial-icon">📄</span>
+                            How to update contact information
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Contact Support -->
+            <div class="contact-support">
+                <p>Questions regarding account management, technical issues, or security concerns are all covered in depth throughout our help section.</p>
+                <p>If you can't find what you're looking for, you can reach our support team at <a href="mailto:support@rentsphere.com">support@rentsphere.com</a> or call <a href="tel:18001234567">1800-123-4567</a>.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function searchFAQ() {
+            let input = document.getElementById("searchInput").value.toLowerCase();
+            let items = document.querySelectorAll(".faq-item");
+
+            items.forEach(item => {
+                if (item.innerText.toLowerCase().includes(input)) {
+                    item.style.display = "block";
+                } else {
+                    item.style.display = "none";
+                }
+            });
+        }
+
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                // Get parent item and answer
+                let item = question.parentElement;
+                let answer = question.nextElementSibling;
+                let arrow = question.querySelector('.faq-arrow');
+                let isVisible = answer.style.display === 'block';
+
+                // Hide all answers
+                document.querySelectorAll('.faq-answer').forEach(ans => ans.style.display = 'none');
+                document.querySelectorAll('.faq-arrow').forEach(arw => arw.style.transform = 'rotate(0deg)');
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+                // Show clicked answer if it was not already open
+                if (!isVisible) {
+                    answer.style.display = 'block';
+                    arrow.style.transform = 'rotate(90deg)';
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

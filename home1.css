@@ -1,0 +1,620 @@
+/* Reset and Global Styles */
+* {
+    
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body.home-page {
+    font-family: Arial, sans-serif;
+    background-color:  #e0eee8;
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    padding-bottom: 200px; /* Height of footer */
+}
+
+/* Navigation Menu Styles */
+
+
+.location-container {
+    position: fixed;
+    top: 20px;
+    right: 90px; /* Adjust this value to change the distance from the left */
+    width: 200px;
+    border: 1px solid #ddd; /* Same as filter-container */
+    border-radius: 20px;
+    background-color: white;
+    overflow: hidden;
+    z-index: 998; /* Ensures proper stacking */
+}
+
+.location-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px;
+    cursor: pointer;
+    background-color: #f1f1f1; /* Matches filter-container */
+    font-weight: bold;
+    border-bottom: 1px solid #ddd;
+}
+
+.location-header .arrow {
+    transition: transform 0.3s ease;
+}
+
+.location-input {
+    display: flex;
+    align-items: center;
+    border: none;
+    padding: 10px;
+    border-radius: 0;
+    cursor: pointer;
+    background-color: white;
+    width: 100%;
+}
+
+.location-input input {
+    flex-grow: 1;
+    border: none;
+    outline: none;
+    background: none;
+    cursor: pointer;
+}
+
+.dropdown-icon {
+    margin-left: 10px;
+    transition: transform 0.3s ease;
+}
+
+.dropdown-icon.rotated {
+    transform: rotate(180deg);
+}
+
+/* Dropdown menu */
+.location-dropdown {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    width: 100%;
+    background: rgb(0, 0, 0);
+    border: 1px solid #ddd;
+    border-radius: 0 0 10px 10px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+
+.location-dropdown.active {
+    display: block;
+}
+
+.location-option {
+    padding: 10px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.location-option:hover {
+    background: #000000;
+}
+
+.site-header {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .logo-container {
+    display: fixed;
+    align-items: center;
+    justify-content: flex-start;
+    margin-left: 50px; /* Move logo 50px to the right */
+    position: fixed;       /* Keeps it fixed on the screen */
+    top: 20px;             /* Push it down from the top (adjust as needed) */
+    left: 50px;            /* Push it to the right from the left (adjust as needed) */
+    z-index: 500;
+  }
+
+  
+  .logo {
+    height: 60px; /* Adjust height as needed */
+    width: auto;
+  }
+  
+
+.modal-overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.5);
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 600px;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.cities-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+}
+
+.city-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.city-item:hover {
+    background-color: #f0f0f0;
+}
+
+.city-item.selected {
+    background-color: #e0e0e0;
+}
+
+.city-icon {
+    font-size: 40px;
+    margin-bottom: 10px;
+}
+
+.city-name {
+    text-align: center;
+}
+
+.new-tag {
+    color: red;
+    font-size: 0.7em;
+    margin-top: 5px;
+}
+
+#citySearch {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 15px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+@media (max-width: 768px) {
+    .cities-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+.search-container {
+    position: static;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.modal-content {
+    display: flex;
+    flex-direction: column;
+}
+
+/* Search Bar Styles */
+.search-bar {
+    position: fixed;
+    top: 10px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    max-width: 700px;
+    display: flex;
+    align-items: center;
+    padding: 7px;
+    background: white;
+    border-radius: 40px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    z-index: 999;
+}
+
+.search-bar input {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    outline: none;
+    font-size: 16px;
+    background: transparent;
+}
+
+.search-bar button {
+    padding: 10px 20px;
+    margin-left: 8px;
+    border: 2px solid #000;
+    background: #000;
+    color: white;
+    border-radius: 30px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+}
+
+.search-bar button:hover {
+    background: white;
+    color: black;
+}
+
+
+.header {
+    position: relative;
+    padding: 10px 20px;
+    background-color: #f5f5f5;
+    height: 60px;
+}
+
+/* Fixed account icon */
+.account-icon {
+    position: fixed;     /* Fixed to the page */
+    top: 15px;           /* Space from top */
+    right: 325px;         /* Space from right */
+    color: #333;
+    cursor: pointer;
+    z-index: 999;        /* On top of everything */
+    text-decoration: none;
+    display: flex;       /* Align icon and text horizontally */
+    align-items: center;
+    transition: color 0.3s;
+  }
+
+  /* Optional hover effect */
+  .account-icon:hover {
+    color: #000000;
+  }
+
+  /* SVG icon inside the link */
+  .account-icon svg {
+    width: 45px;   /* Bigger size */
+    height: 60px;
+    fill: currentColor; /* Inherits color from parent */
+    margin-right: 8px;  /* Space between icon and text */
+  }
+
+
+
+.item-card {
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin: 10px;
+  }
+
+  .cart-container {
+    position: fixed;
+    top: 60px;            /* Slightly lower than the account icon (20px + 40px gap) */
+    right: 250px;
+    left: 30px;         /* Exactly aligned horizontally with account icon */
+    background: rgb(0, 0, 0);
+    border: 1px solid #333;
+    padding: 10px;
+    display: none;
+    width: 300px;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 8px;
+}
+
+
+
+  .cart-item {
+    border-bottom: 1px solid #000000;
+    margin-bottom: 10px;
+  }
+
+  .cart-icon {
+    position: fixed;
+    top: 20px;
+    right: -20px;
+    background: #ffffff;
+    color: white;
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+
+  button {
+    padding: 5px 10px;
+    margin-top: 5px;
+  }
+
+/* Main Content Styles */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    margin-top: 60px;
+}
+
+.container header {
+    text-align: center;
+    margin: 20px 0 40px;
+}
+
+/* Update the existing Card Styles section */
+.card.ad-card {
+    width:20rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    padding: 15px;
+    transition: transform 0.2s;
+    overflow: hidden; /* Add this to contain images */
+}
+
+/* Update the images section within cards */
+.card.ad-card .images {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%; /* Ensure full width */
+}
+
+.card.ad-card .images img {
+    width: 100dvh;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 4px;
+    max-width: 100%; /* Ensure images don't exceed container */
+    display: block; /* Remove any unwanted space */
+}
+
+@media (min-width: 992px) {
+    .modal-lg, .modal-xl {
+        --bs-modal-width: 1200px !important;
+    }
+}
+
+/* Update Modal Styles section */
+/* Modal Container */
+.modal {
+    pointer-events: auto; /* Allow interactions inside the modal */
+}
+
+/* Main modal content wrapper */
+.modal-content {
+    width: 100%; /* Corrected from 1000% to 100% */
+    height: 100%;
+    overflow-y: auto; /* Ensure content is scrollable if it overflows */
+    padding: 20px;
+    pointer-events: auto; /* Enable clicking on content */
+}
+
+/* Inner modal styling */
+.modal-content-inner {
+    background: white;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 100%;
+    max-height: 80vh;
+    overflow-y: auto;
+    pointer-events: auto; /* Ensure interaction inside inner content */
+}
+
+/* Modal body scroll & layout */
+.modal-body {
+    overflow-y: auto;
+    max-height: 70vh; /* Scrollable content */
+    pointer-events: auto; /* Allow clicks inside body */
+}
+
+/* Modal footer buttons and layout */
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 10px; /* Prevent button from getting cut */
+    pointer-events: auto; /* Ensure buttons are clickable */
+}
+
+/* Images inside modal body */
+.modal-body img {
+    width: 100%; /* Changed from 150% to avoid breaking layout */
+    max-height: 400px;
+    object-fit: contain;
+    display: block; /* Remove any unwanted space */
+    margin: 0 auto; /* Center images */
+}
+
+/* Add to Cart button styling */
+.rbutton {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 8px 20px;
+    font-size: 17px;
+    font-weight: bold;
+    border-radius: 15px;
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.rbutton:hover {
+    background-color: #1aff00;
+    transform: scale(1.05);
+}
+
+.rbutton:active {
+    background-color: #1aff00;
+    transform: scale(0.98);
+}
+
+/* Update the container styles */
+.container {
+    width: 100%;
+    max-width: 1200px;
+    margin: 10px auto;
+    padding: 20px;
+    margin-top: 60px;
+    overflow: hidden; /* Add this to contain all content */
+}
+
+/* Update the ads-list grid */
+.ads-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 20px;
+    width: 100%; /* Ensure full width */
+}
+/* Footer Styles */
+footer {
+    margin-top: auto;
+    background-color: #f8f9fa;
+    padding: 20px 0;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    border-top: 1px solid #ddd;
+    text-align: center;
+}
+
+.footer-container {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.footer-column {
+    flex: 1;
+    min-width: 200px;
+    margin: 10px;
+}
+
+.footer-column h3 {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 15px;
+    color: #333;
+}
+
+.footer-column p,
+.footer-column a {
+    font-size: 12px;
+    color: #666;
+    margin: 8px 0;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer-column a:hover {
+    color: #000;
+}
+
+.social-icons,
+.app-links {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.social-icons img,
+.app-links img {
+    width: 20px;
+    height: 20px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.social-icons img:hover,
+.app-links img:hover {
+    transform: scale(1.1);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+    .search-bar {
+        width: 80%;
+    }
+    
+    .location-container {
+        left: 60px;
+    }
+    
+    .filter-container {
+        right: 60px;
+    }
+    
+    .footer-container {
+        flex-direction: column;
+    }
+    
+    .footer-column {
+        margin: 20px 0;
+    }
+}
+
+@media (min-width: px) {
+    .modal-lg {
+        --bs-modal-width: 200% !important;
+    }
+}
+
+.inner-modal-show{
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    align-items: center;
+    text-align: center;
+}
+.inner-left-modal{
+    width: 100%;
+}
+
+
+.cart-icon {
+    color: #000000;
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.cart-count {
+    position: absolute;
+    top: -10px;
+    right: -10px;
+    background-color: #f37566;
+    color: rgb(0, 0, 0);
+    font-size: 12px;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.cart-header p {
+    color: #000000;
+    margin-bottom: 20px;
+}
+
+

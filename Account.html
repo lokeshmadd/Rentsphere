@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Roboto', Arial, sans-serif;
+        }
+        
+        body {
+            background-color:  #e0eee8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .phone-container {
+            width: 360px;
+            height: 640px;
+            background: linear-gradient(135deg, #a64eee 0%, #a755f7 100%);
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+        
+        .header {
+            padding: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .back-button {
+            color: white;
+            font-size: 24px;
+            cursor: pointer;
+        }
+        
+        .edit-button, .save-button {
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 5px 10px;
+            border-radius: 5px;
+            border: none;
+        }
+        
+        .save-button {
+            display: none;
+        }
+        
+        .profile-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px 0;
+        }
+        
+        .profile-pic-container {
+            position: relative;
+            margin-bottom: 10px;
+        }
+        
+        .profile-pic {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .profile-pic img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .camera-icon {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            background-color: #a64eee;
+            color: white;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .profile-name, .profile-email {
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin-bottom: 5px;
+        }
+        
+        .profile-name {
+            font-size: 18px;
+            font-weight: 500;
+        }
+        
+        .profile-email {
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.8);
+        }
+        
+        .profile-input {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            margin-bottom: 5px;
+            text-align: center;
+            display: none;
+            font-size: 16px;
+            width: 200px;
+        }
+        
+        .profile-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+        
+        .action-tabs {
+            display: flex;
+            justify-content: space-around;
+            background-color: white;
+            border-radius: 8px;
+            margin: 0 15px;
+            padding: 15px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .tab {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 33.33%;
+            position: relative;
+        }
+        
+        .tab i {
+            font-size: 24px;
+            color: #555;
+            margin-bottom: 5px;
+        }
+        
+        .tab-name {
+            font-size: 12px;
+            color: #333;
+        }
+        
+        .badge {
+            position: absolute;
+            top: -5px;
+            right: 20px;
+            background-color: #f44336;
+            color: white;
+            font-size: 12px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .content-section {
+            background-color: #f5f5f5;
+            border-radius: 25px 25px 0 0;
+            margin-top: 20px;
+            height: 100%;
+            padding: 20px 0;
+        }
+        
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            background-color: white;
+            margin-bottom: 1px;
+            cursor: pointer;
+        }
+        
+        .menu-item:first-child {
+            border-radius: 0;
+        }
+        
+        .menu-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            color: #555;
+            text-align: center;
+        }
+        
+        .menu-text {
+            flex-grow: 1;
+            font-size: 14px;
+            color: #333;
+        }
+        
+        .menu-value {
+            background-color: #00c853;
+            color: white;
+            font-size: 14px;
+            padding: 2px 12px;
+            border-radius: 15px;
+        }
+        
+        .chevron {
+            color: #aaa;
+            margin-left: 10px;
+        }
+        
+        #fileInput {
+            display: none;
+        }
+        
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.7);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            font-size: 14px;
+            opacity: 0;
+            transition: opacity 0.3s;
+            z-index: 1000;
+        }
+        
+        .loading-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1001;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.3s;
+        }
+        
+        .spinner {
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top: 3px solid white;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        /* Material icons */
+        .material-icons {
+            font-family: 'Material Icons';
+            font-weight: normal;
+            font-style: normal;
+            font-size: 24px;
+            display: inline-block;
+            line-height: 1;
+            text-transform: none;
+            letter-spacing: normal;
+            word-wrap: normal;
+            white-space: nowrap;
+            direction: ltr;
+        }
+    </style>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="phone-container">
+        <div class="loading-overlay" id="loadingOverlay">
+            <div class="spinner"></div>
+        </div>
+        
+        <div class="header">
+            <i class="material-icons back-button" onclick="goHome()">arrow_back</i>
+            <button class="edit-button">Edit</button>
+            <button class="save-button">Save</button>
+        </div>
+        
+        <div class="profile-section">
+            <div class="profile-pic-container">
+                <div class="profile-pic">
+                    <img src="/api/placeholder/80/80" alt="Profile Picture" id="profileImage">
+                    <input type="file" id="fileInput" accept="image/*">
+                </div>
+                <div class="camera-icon">
+                    <i class="material-icons" style="font-size: 16px;">camera_alt</i>
+                </div>
+            </div>
+            
+            <div class="profile-name">John Doe</div>
+            <input type="text" class="profile-input" id="nameInput" placeholder="Enter your name">
+            
+            <div class="profile-email">john.doe@example.com</div>
+            <input type="email" class="profile-input" id="emailInput" placeholder="Enter your email">
+        </div> 
+        
+        <div class="action-tabs">
+            <div class="tab">
+                <i class="material-icons">receipt</i>
+                <div class="tab-name">My Orders</div>
+            </div>
+            <div class="tab">
+                <i class="material-icons">shopping_cart</i> <!-- Shopping Cart Icon -->
+                <div class="tab-name">Cart</div>
+                <div class="badge">0</div>
+            </div>
+
+            <div class="tab">
+                <i class="material-icons">notifications_none</i>
+                <div class="tab-name">Notifications</div>
+                <div class="badge">0</div>
+            </div>
+        </div>
+        
+        <div class="content-section">
+                <div class="menu-item">
+                    <i class="material-icons menu-icon">person_outline</i>
+                    <div class="menu-text">My Profile</div>
+                    <i class="material-icons chevron">chevron_right</i>
+                </div>
+            </a>
+            
+            <div class="menu-item">
+                <i class="material-icons menu-icon">location_on</i>
+                <div class="menu-text">Location </div>
+                <i class="material-icons chevron">chevron_right</i>
+            </div>
+            
+            <div class="menu-item">
+                <i class="material-icons menu-icon">chat_bubble_outline</i>
+                <div class="menu-text">My Chat</div>
+                <i class="material-icons chevron">chevron_right</i>
+            </div>
+            
+            <div class="menu-item">
+                <i class="material-icons menu-icon">star_border</i>
+                <div class="menu-text">Rate Your Purchase</div>
+                <i class="material-icons chevron">chevron_right</i>
+            </div>
+        </div>
+    </div>
+    
+    <div class="toast" id="toast">Changes saved successfully!</div>
+
+    <script>
+        // Config
+       // Config
+const API_URL = 'http://localhost:5000/api'; // Changed to match your backend port
+let userId = '';
+let profileImageData = null;
+
+// DOM Elements
+const editButton = document.querySelector('.edit-button');
+const saveButton = document.querySelector('.save-button');
+const profileName = document.querySelector('.profile-name');
+const profileEmail = document.querySelector('.profile-email');
+const nameInput = document.getElementById('nameInput');
+const emailInput = document.getElementById('emailInput');
+const profilePic = document.querySelector('.profile-pic');
+const cameraIcon = document.querySelector('.camera-icon');
+const fileInput = document.getElementById('fileInput');
+const profileImage = document.getElementById('profileImage');
+const backButton = document.querySelector('.back-button');
+const toast = document.getElementById('toast');
+const loadingOverlay = document.getElementById('loadingOverlay');
+
+// Helper functions
+function showLoading() {
+    loadingOverlay.style.opacity = '1';
+    loadingOverlay.style.visibility = 'visible';
+}
+
+function hideLoading() {
+    loadingOverlay.style.opacity = '0';
+    setTimeout(() => {
+        loadingOverlay.style.visibility = 'hidden';
+    }, 300);
+}
+
+function showToast(message = 'Changes saved successfully!') {
+    toast.textContent = message;
+    toast.style.opacity = '1';
+    setTimeout(() => {
+        toast.style.opacity = '0';
+    }, 3000);
+}
+
+// Initialize - Load user data
+window.onload = async function() {
+    // Check if user ID exists in localStorage
+    userId = localStorage.getItem('userId');
+    
+    if (userId) {
+        try {
+            await fetchUserData(userId);
+        } catch (error) {
+            console.error("Error fetching user data:", error);
+            // If there's an error fetching user data, create a new user
+            await createNewUser();
+        }
+    } else {
+        // Create a new user if no user ID is found
+        await createNewUser();
+    }
+};
+
+// Fetch user data from MongoDB
+async function fetchUserData(id) {
+    try {
+        showLoading();
+        const response = await fetch(`${API_URL}/user/${id}`);
+        
+        if (response.ok) {
+            const userData = await response.json();
+            
+            // Update UI with user data
+            profileName.textContent = userData.name || 'Name';
+            profileEmail.textContent = userData.email || 'Email';
+            nameInput.value = userData.name || '';
+            emailInput.value = userData.email || '';
+            
+            if (userData.profilePicture) {
+                // Make sure to handle relative paths correctly
+                profileImage.src = userData.profilePicture.startsWith('http') 
+                    ? userData.profilePicture 
+                    : `http://localhost:5000${userData.profilePicture}`;
+            }
+        } else {
+            // If user not found, create a new one
+            await createNewUser();
+        }
+    } catch (error) {
+        console.error('Error fetching user data:', error);
+        showToast('Error loading user data. Please try again.');
+        throw error; // Propagate error to caller
+    } finally {
+        hideLoading();
+    }
+}
+
+// Create a new user in MongoDB
+async function createNewUser() {
+    try {
+        showLoading();
+        const response = await fetch(`${API_URL}/user`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                name: 'New User',
+                email: 'user@example.com',
+                profilePicture: ''
+            })
+        });
+        
+        if (response.ok) {
+            const newUser = await response.json();
+            userId = newUser._id;
+            localStorage.setItem('userId', userId);
+            
+            // Update UI with new user data
+            profileName.textContent = newUser.name || 'New User';
+            profileEmail.textContent = newUser.email || 'user@example.com';
+            nameInput.value = newUser.name || 'New User';
+            emailInput.value = newUser.email || 'user@example.com';
+            
+            showToast('New user profile created!');
+        } else {
+            throw new Error('Failed to create user');
+        }
+    } catch (error) {
+        console.error('Error creating user:', error);
+        showToast('Error creating user profile. Please try again.');
+    } finally {
+        hideLoading();
+    }
+}
+
+// Upload profile picture
+async function uploadProfilePicture(file) {
+    try {
+        showLoading();
+        const formData = new FormData();
+        formData.append('profilePicture', file);
+        
+        const response = await fetch(`${API_URL}/upload`, {
+            method: 'POST',
+            body: formData
+        });
+        
+        if (response.ok) {
+            const data = await response.json();
+            return data.filePath;
+        } else {
+            throw new Error('Failed to upload image');
+        }
+    } catch (error) {
+        console.error('Error uploading profile picture:', error);
+        showToast('Error uploading profile picture. Please try again.');
+        return null;
+    } finally {
+        hideLoading();
+    }
+}
+
+// Update user profile in MongoDB
+async function updateUserProfile(profileData) {
+    try {
+        showLoading();
+        const response = await fetch(`${API_URL}/user/${userId}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(profileData)
+        });
+        
+        if (response.ok) {
+            const updatedUser = await response.json();
+            showToast('Profile updated successfully!');
+            return updatedUser;
+        } else {
+            throw new Error('Failed to update profile');
+        }
+    } catch (error) {
+        console.error('Error updating profile:', error);
+        showToast('Error updating profile. Please try again.');
+        return null;
+    } finally {
+        hideLoading();
+    }
+}
+
+// Edit mode
+editButton.addEventListener('click', function() {
+    // Hide display elements, show input fields
+    profileName.style.display = 'none';
+    profileEmail.style.display = 'none';
+    nameInput.style.display = 'block';
+    emailInput.style.display = 'block';
+    
+    // Set input values
+    nameInput.value = profileName.textContent;
+    emailInput.value = profileEmail.textContent;
+    
+    // Show save button, hide edit button
+    editButton.style.display = 'none';
+    saveButton.style.display = 'block';
+});
+
+// Save changes
+saveButton.addEventListener('click', async function() {
+    const name = nameInput.value || 'Name';
+    const email = emailInput.value || 'Email';
+    
+    let profilePicturePath = profileImage.src;
+    
+    // If there's a new profile image to upload
+    if (profileImageData) {
+        const uploadedPath = await uploadProfilePicture(profileImageData);
+        if (uploadedPath) {
+            profilePicturePath = uploadedPath;
+        }
+    }
+    
+    // If the profile picture is a full URL, extract just the path part for storage
+    if (profilePicturePath.startsWith('http://localhost')) {
+        profilePicturePath = new URL(profilePicturePath).pathname;
+    }
+    
+    // Update user profile in MongoDB
+    const updatedUser = await updateUserProfile({
+        name,
+        email,
+        profilePicture: profilePicturePath
+    });
+    
+    if (updatedUser) {
+        // Update UI
+        profileName.textContent = updatedUser.name;
+        profileEmail.textContent = updatedUser.email;
+        
+        if (updatedUser.profilePicture) {
+            // Ensure proper URL formatting
+            profileImage.src = updatedUser.profilePicture.startsWith('http') 
+                ? updatedUser.profilePicture 
+                : `http://localhost:5000${updatedUser.profilePicture}`;
+        }
+        
+        // Reset image data
+        profileImageData = null;
+    }
+    
+    // Hide input fields, show display elements
+    profileName.style.display = 'block';
+    profileEmail.style.display = 'block';
+    nameInput.style.display = 'none';
+    emailInput.style.display = 'none';
+    
+    // Hide save button, show edit button
+    saveButton.style.display = 'none';
+    editButton.style.display = 'block';
+});
+
+// Profile picture upload
+cameraIcon.addEventListener('click', function() {
+    fileInput.click();
+});
+
+profilePic.addEventListener('click', function() {
+    fileInput.click();
+});
+
+fileInput.addEventListener('change', function() {
+    if (this.files && this.files[0]) {
+        const reader = new FileReader();
+        
+        reader.onload = function(e) {
+            profileImage.src = e.target.result;
+            profileImageData = fileInput.files[0];
+        };
+        
+        reader.readAsDataURL(this.files[0]);
+    }
+});
+
+
+
+// Tab interactions
+document.querySelectorAll('.tab').forEach(tab => {
+    tab.addEventListener('click', function() {
+        // Highlight the selected tab
+        document.querySelectorAll('.tab i').forEach(icon => {
+            icon.style.color = '#555';
+        });
+        this.querySelector('i').style.color = '#a64eee';
+    });
+});
+
+// Menu item interactions
+document.querySelectorAll('.menu-item').forEach(item => {
+    item.addEventListener('click', function() {
+        // Simple feedback on click
+        this.style.backgroundColor = '#f0f0f0';
+        setTimeout(() => {
+            this.style.backgroundColor = 'white';
+        }, 200);
+    });
+});
+function goHome() {
+    window.location.href = "home.html"; // Redirect to your home page
+}
+    </script>
+</body>
+</html>

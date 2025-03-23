@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RentSphere - Terms and Policies</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #e0eee8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar Styles */
+        .menu-icon {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .menu-icon.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .left-section {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .left-section.active {
+            left: 0;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .nav-menu li {
+            margin: 15px 0;
+        }
+
+        .nav-menu a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background-color: #000000;
+        }
+        .container {
+            max-width: 800px;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        h2, h3 {
+            text-align: center;
+        }
+        p {
+            line-height: 1.6;
+        }
+        ul {
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Menu Icon -->
+    <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</div>
+    <!-- Sidebar -->
+    <div class="left-section" id="leftMenu">
+        <h2>Rentsphere</h2>
+        <ul class="nav-menu">
+            <li><a href="Home.html" onclick="showSection('home')">🏠 Home</a></li>
+            <li><a href="profile.html" onclick="showSection('profile')">👤 Profile</a></li>
+            <li><a href="Myrentals.html" onclick="showSection('My-Rentals')">📦 My Rentals</a></li> 
+            <li><a href="categories.html" onclick="showSection('categories')">📊 Categories</a></li>
+            <li><a href="postaRental.html" onclick="showSection('Post-a-Rental')">➕ Post a Rentals</a></li>
+            <li><a href="Notifications.html" onclick="showSection('notifications')">🔔 Notifications</a></li>
+            <li><a href="RentalAgreement.html" onclick="showSection('rental-agreement')">📜 Rental Agreement</a></li>
+            <li><a href="payment&Transcation.html" onclick="showSection('payment')">💳 Payment & Transcation</a></li>
+            <li><a href="help.html" onclick="showSection('help')">❓ Help</a></li>
+            <li><a href="Terms&policies.html" onclick="showSection('&ptermsolicies')">⚖️ Terms & policies</a></li>
+            <li><a href="settings.html" onclick="showSection('settings')">⚙️ Settings</a></li>
+
+        </ul>
+    </div>
+
+    <div class="container">
+        <h2>RentSphere - Terms and Policies</h2>
+        
+        1. Introduction
+        <p>Welcome to RentSphere! These Terms and Policies outline the rules and regulations for using our platform...</p>
+        
+        2. User Responsibilities
+        <ul>
+            <li>Users must provide accurate information.</li>
+            <li>Renters must return items in good condition.</li>
+            <li>Owners must ensure items are functional and safe.</li>
+        </ul>
+        
+        3. Rental Agreements
+        <ul>
+            <li>A rental agreement is formed between Owner and Renter upon booking.</li>
+            <li>Late returns may result in additional charges.</li>
+        </ul>
+        
+        4. Payments and Fees
+        <p>Payments must be made through RentSphere’s secure system...</p>
+        
+        5. Security Deposit and Damages
+        <ul>
+            <li>Owners may require a security deposit.</li>
+            <li>Damaged items may result in deductions from the deposit.</li>
+        </ul>
+        
+        6. Prohibited Items
+        <p>The following items are not allowed to be rented:</p>
+        <ul>
+            <li>Illegal goods</li>
+            <li>Hazardous materials</li>
+            <li>Weapons or explosives</li>
+        </ul>
+        
+        7. Cancellations and Refunds
+        <p>Refunds are subject to the Owner’s cancellation policy...</p>
+        
+        8. Liability and Indemnification
+        <p>RentSphere is not responsible for damages or disputes between Renters and Owners.</p>
+        
+        9. Privacy and Data Protection
+        <p>RentSphere collects user data in accordance with our Privacy Policy...</p>
+        
+        10. Account Suspension and Termination
+        <p>We reserve the right to suspend accounts violating these terms.</p>
+        
+        11. Governing Law
+        <p>These policies are governed by the laws of [Your Country/State].</p>
+        
+        12. Updates to Terms and Policies
+        <p>RentSphere may update these terms at any time.</p>
+    </div>
+    <script>
+        // Toggle sidebar menu
+        function toggleMenu() {
+            const menu = document.getElementById("leftMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            menu.classList.toggle("active");
+            menuIcon.classList.toggle("hidden");
+        }
+
+        // Close menu function
+        function closeMenu() {
+            const menu = document.getElementById("leftMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            menu.classList.remove("active");
+            menuIcon.classList.remove("hidden");
+        }
+    // Close menu when clicking outside
+    document.addEventListener('click', function(e) {
+        const menu = document.getElementById("leftMenu");
+        const menuIcon = document.getElementById("menuIcon");
+        if (!menu.contains(e.target) && !menuIcon.contains(e.target)) {
+            closeMenu();
+        }
+    });
+
+    </script>
+
+</body>
+</html>

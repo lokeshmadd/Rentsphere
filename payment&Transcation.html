@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment</title>
+    <style>
+        /* General Styling */
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(180deg,  #e0eee8 10%,  #e0eee8 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        
+        /* Payment Container */
+        .payment-container {
+            background: white;
+            width: 400px;
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 50px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Title */
+        .title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        /* Payment Option */
+        .payment-option {
+            display: flex;
+            align-items: center;
+            background: #f8f8f8;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        
+        .payment-option:hover {
+            background: #ececec;
+        }
+        
+        .payment-option.selected {
+            border: 2px solid #8A4EFF;
+            background-color: #F0E7FF;
+        }
+        
+        /* Payment Logo */
+        .payment-logo {
+            width: 30px;
+            height: 30px;
+            margin-right: 12px;
+        }
+        
+        /* Payment Details */
+        .payment-details {
+            flex-grow: 1;
+        }
+        
+        .payment-name {
+            font-size: 16px;
+            font-weight: bold;
+        }
+           
+        /* Radio Button */
+        .radio-button {
+            width: 18px;
+            height: 18px;
+            border: 2px solid #8A4EFF;
+            border-radius: 50%;
+            position: relative;
+            transition: 0.3s;
+        }
+        
+        .radio-button.selected::after {
+            content: '';
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: #8c5bef;
+            border-radius: 50%;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+        }
+        
+        /* Pay Button */
+        .pay-button {
+            width: 100%;
+            background: #2359b7;
+            color: white;
+            font-size: 16px;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: auto;
+            display: none; /* Initially hidden */
+        }
+        
+        .pay-button:hover {
+            background: #6b3ee4;
+        }
+        
+        /* Card Details */
+        #card-details {
+            display: none;
+            margin-top: 15px;
+        }
+
+        .card-details input {
+            width: 95%;
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        /* Styling for Month, Year, and CVV to be smaller */
+        .card-details .small-input {
+            width: 30%; /* Adjust width as needed */
+            display: inline-block;
+            margin-right: 5px;
+        }
+
+        /* Ensure Card Number stays the same */
+        .card-details .full-width {
+            width: 95%;
+        }
+
+        /* Sidebar Styles */
+        .menu-icon {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .menu-icon.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .left-section {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .left-section.active {
+            left: 0;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .nav-menu li {
+            margin: 15px 0;
+        }
+
+        .nav-menu a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</div>
+    <div class="left-section" id="leftMenu">
+        <h2>Rentsphere</h2>
+        <ul class="nav-menu">
+            <li><a href="Home.html" onclick="showSection('home')">🏠 Home</a></li>
+            <li><a href="Account.html" onclick="showSection('profile')">👤Account</a></li>
+            <li><a href="Myrentals.html" onclick="showSection('My-Rentals')">📦 My Rentals</a></li> 
+            <li><a href="categories.html" onclick="showSection('categories')">📊 Categories</a></li>
+            <li><a href="postaRental.html" onclick="showSection('Post-a-Rental')">➕ Post a Rentals</a></li>
+            <li><a href="Notifications.html" onclick="showSection('notifications')">🔔 Notifications</a></li>
+            <li><a href="RentalAgreement.html" onclick="showSection('rental-agreement')">📜 Rental Agreement</a></li>
+            <li><a href="payment&Transcation.html" onclick="showSection('payment')">💳 Payment & Transcation</a></li>
+            <li><a href="help.html" onclick="showSection('help')">❓ Help</a></li>
+            <li><a href="Terms&policies.html" onclick="showSection('&ptermsolicies')">⚖️ Terms & policies</a></li>
+            <li><a href="settings.html" onclick="showSection('settings')">⚙️ Settings</a></li>
+        </ul>
+    </div>
+
+    <div class="payment-container">
+        <h2 class="title">UPI</h2>
+
+        <div class="payment-option selected" data-method="google-pay">
+            <img src="Gpay.png" class="payment-logo">
+            <div class="payment-details">
+                <div class="payment-name">Google Pay</div>
+            </div>
+            <div class="radio-button selected"></div>
+        </div>
+
+        <div class="payment-option" data-method="razorpay">
+            <img src="razorpay.jpg" class="payment-logo">
+            <div class="payment-details">
+                <div class="payment-name">Razorpay</div>
+            </div>
+            <div class="radio-button"></div>
+        </div>
+
+        <div class="payment-option" data-method="phonepay">
+            <img src="phonepay.jpg" class="payment-logo">
+            <div class="payment-details">
+                <div class="payment-name">PhonePe</div>
+            </div>
+            <div class="radio-button"></div>
+        </div>
+
+        <h3 class="title">Preferred Mode</h3>
+
+        <div class="payment-option" data-method="mobikwik">
+            <img src="mobikwik.png" class="payment-logo">
+            <div class="payment-details">
+                <div class="payment-name">Mobikwik</div>
+            </div>
+            <div class="radio-button"></div>
+        </div>
+
+        <div class="payment-option" data-method="card">
+            <img src="card.jpeg" class="payment-logo">
+            <div class="payment-details">
+                <div class="payment-name">Card</div>
+            </div>
+            <div class="radio-button"></div>
+        </div>
+
+        <div id="card-details" class="card-details">
+            <h3>Enter Card Details</h3>
+            <input type="text" id="cardNumber" placeholder="Card Number">
+            <input type="text" class="small-input" id="expiryDate" placeholder="MM/YY">
+            <input type="password" class="small-input" id="cvv" placeholder="CVV">
+        </div>
+
+        <button class="pay-button">Proceed to Pay</button>
+    </div>
+
+    <!-- Razorpay Checkout Script -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <script>
+        // Toggle sidebar menu
+        function toggleMenu() {
+            const menu = document.getElementById("leftMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            menu.classList.toggle("active");
+            menuIcon.classList.toggle("hidden");
+        }
+
+        // Close menu function
+        function closeMenu() {
+            const menu = document.getElementById("leftMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            menu.classList.remove("active");
+            menuIcon.classList.remove("hidden");
+        }
+        
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById("leftMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            if (!menu.contains(e.target) && !menuIcon.contains(e.target)) {
+                closeMenu();
+            }
+        });
+        
+        document.addEventListener("DOMContentLoaded", function () { 
+            const paymentOptions = document.querySelectorAll(".payment-option");
+            const payButton = document.querySelector(".pay-button");
+            const cardDetailsForm = document.getElementById("card-details");
+            const cardNumberInput = document.getElementById("cardNumber");
+            const expiryDateInput = document.getElementById("expiryDate");
+            const cvvInput = document.getElementById("cvv");
+            
+            let selectedMethod = "google-pay"; // Default selection
+        
+            function updatePaymentMethod(option) {
+                paymentOptions.forEach(opt => {
+                    opt.classList.remove("selected");
+                    opt.querySelector(".radio-button")?.classList.remove("selected");
+                });
+        
+                option.classList.add("selected");
+                option.querySelector(".radio-button")?.classList.add("selected");
+        
+                selectedMethod = option.dataset.method;
+        
+                // Show card details form only if "Card" is selected
+                if (selectedMethod === "card") {
+                    cardDetailsForm.style.display = "block";
+                } else {
+                    cardDetailsForm.style.display = "none";
+                }
+        
+                // Update pay button text
+                payButton.innerText = `Pay using ${option.querySelector(".payment-name").innerText}`;
+                payButton.style.display = "block"; 
+            }
+        
+            // Apply click event to each payment option
+            paymentOptions.forEach(option => {
+                option.addEventListener("click", function () {
+                    updatePaymentMethod(this);
+                });
+            });
+        
+            // Format Card Number Input (XXXX XXXX XXXX XXXX)
+            cardNumberInput?.addEventListener("input", function (e) {
+                let value = e.target.value.replace(/\D/g, "").substring(0, 16);
+                e.target.value = value.replace(/(\d{4})/g, "$1 ").trim();
+            });
+        
+            // Format Expiry Date Input (MM / YY)
+            expiryDateInput?.addEventListener("input", function (e) {
+                let value = e.target.value.replace(/\D/g, "").substring(0, 4);
+                if (value.length > 2) {
+                    value = value.replace(/^(\d{2})(\d{0,2})/, "$1 / $2");
+                }
+                e.target.value = value;
+            });
+        
+            // Ensure CVV is exactly 3 digits
+            cvvInput?.addEventListener("input", function (e) {
+                e.target.value = e.target.value.replace(/\D/g, "").substring(0, 3);
+            });
+        
+            // Handle payment button click
+            payButton?.addEventListener("click", function () {
+                if (!selectedMethod) {
+                    alert("Please select a payment method.");
+                    return;
+                }
+        
+                // Handle card payment validation
+                if (selectedMethod === "card") {
+                    const cardNumber = cardNumberInput.value.replace(/\s/g, "");
+                    const expiryDate = expiryDateInput.value.replace(/\s/g, "");
+                    const cvv = cvvInput.value.trim();
+        
+                    if (cardNumber.length !== 16) {
+                        alert("Card number must be 16 digits.");
+                        return;
+                    }
+        
+                    if (!/^\d{2}\/\d{2}$/.test(expiryDate)) {
+                        alert("Expiry date must be in MM / YY format.");
+                        return;
+                    }
+        
+                    if (cvv.length !== 3) {
+                        alert("CVV must be exactly 3 digits.");
+                        return;
+                    }
+                    
+                    alert(`Payment successful using ${selectedMethod}!`);
+                } 
+                // Handle Razorpay integration
+                else if (selectedMethod === "razorpay") {
+                    var options = {
+                        "key": "YOUR_RAZORPAY_KEY_ID", // Replace with your Razorpay key ID
+                        "amount": 50000, // Amount in paise (50000 paise = ₹500)
+                        "currency": "INR",
+                        "name": "RentSphere",
+                        "description": "Rent Payment",
+                        "image": "https://cdn.razorpay.com/logo.svg", // Optional logo
+                        "handler": function (response) {
+                            alert("Payment successful! Payment ID: " + response.razorpay_payment_id);
+                            // You can send the response.razorpay_payment_id to your backend to verify
+                        },
+                        "prefill": {
+                            "name": "Lokesh Maddipati",
+                            "email": "lokesh@example.com",
+                            "contact": "9876543210"
+                        },
+                        "notes": {
+                            "address": "Nagpur, Maharashtra"
+                        },
+                        "theme": {
+                            "color": "#3399cc"
+                        }
+                    };
+                    
+                    var rzp = new Razorpay(options);
+                    rzp.open();
+                } 
+                else {
+                    // Handle other payment methods
+                    alert(`Payment successful using ${selectedMethod}!`);
+                }
+            });
+            
+            // Select the default payment method at startup
+            const defaultOption = document.querySelector(".payment-option.selected");
+            if (defaultOption) {
+                updatePaymentMethod(defaultOption);
+            }
+        });
+    </script>
+</body>
+</html>

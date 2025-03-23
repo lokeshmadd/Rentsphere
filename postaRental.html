@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Your Ad</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
+        body { background-color:  #e0eee8;; padding: 20px; }
+        .category-fields { display: none; }
+        .container { max-width: 800px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .preview img { width: 100px; height: 100px; margin: 5px; }
+        .ad-card { border: 1px solid #ddd; padding: 10px; margin: 10px 0; background: #f9f9f9; }
+        input, select, textarea { width: 100%; padding: 8px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 10px; }
+        button { background-color: #002f34; color: white; padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 16px; }
+        button:hover { background-color: #004f58; }
+        .mandatory { color: red; margin-left: 3px; }
+         /* Sidebar Styles */
+         .menu-icon {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .menu-icon.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .left-section {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .left-section.active {
+            left: 0;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .nav-menu li {
+            margin: 15px 0;
+        }
+
+        .nav-menu a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background-color: #000000;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Menu Icon -->
+    <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</div>
+
+    <!-- Sidebar -->
+    <div class="left-section" id="leftMenu">
+        <h2>Rentsphere</h2>
+        <ul class="nav-menu">
+            <li><a href="Home.html" onclick="showSection('home')">🏠 Home</a></li>
+            <li><a href="Account.html" onclick="showSection('profile')">👤 Account</a></li>
+            <li><a href="Myrentals.html" onclick="showSection('My-Rentals')">📦 My Rentals</a></li> 
+            <li><a href="categories.html" onclick="showSection('categories')">📊 Categories</a></li>
+            <li><a href="postaRental.html" onclick="showSection('Post-a-Rental')">➕ Post a Rentals</a></li>
+            <li><a href="Notifications.html" onclick="showSection('notifications')">🔔 Notifications</a></li>
+            <li><a href="RentalAgreement.html" onclick="showSection('rental-agreement')">📜 Rental Agreement</a></li>
+            <li><a href="payment&Transcation.html" onclick="showSection('payment')">💳 Payment & Transcation</a></li>
+            <li><a href="help.html" onclick="showSection('help')">❓ Help</a></li>
+            <li><a href="Terms&policies.html" onclick="showSection('&ptermsolicies')">⚖️ Terms & policies</a></li>
+            <li><a href="settings.html" onclick="showSection('settings')">⚙️ Settings</a></li>
+
+        </ul>
+    </div>
+
+    <div class="container">
+        <form id="adForm">
+            <h2>Post Your Ad</h2>
+
+            <div class="form-group">
+                <label>Category<span class="mandatory">*</span></label>
+                <select name="category" id="categorySelect" required onchange="updateFormFields()">
+                    <option value="">Select Category</option>
+                    <option value="cars">Cars</option>
+                    <option value="mobiles">Mobiles</option>
+                    <option value="bikes">Bikes</option>
+                    <option value="cameras">Cameras</option>
+                    <option value="electronics">Electronics & Appliances</option>
+                    <option value="furniture">Furniture</option>
+                    <option value="food_utensils">Food Utensils</option>
+                    <option value="fashion">Fashion</option>
+                    <option value="properties">Properties</option>
+                    <option value="pets">Pets</option>
+                    <option value="services">Services</option>
+                    <option value="commercial_vehicles">Commercial Vehicles & Spares</option>
+                    <option value="books">Books</option>
+                    <option value="agriculture">Agriculture</option>
+                    <option value="miscellaneous">Miscellaneous</option>
+                    <option value="sports">Sports</option>
+                    <option value="offices">Offices</option>
+                    <option value="vacation_rentals">Vacation Rentals</option>
+                </select>
+            </div>
+
+            <!-- Cars Fields -->
+<div id="carsFields" class="category-fields">
+    <label for="car_brand">Brand<span class="mandatory">*</span></label>
+    <select name="car_brand" id="car_brand">
+        <option value="">Select Brand</option>
+        <option value="Fortuner">Fortuner</option>
+        <option value="Thar">Thar</option>
+        <option value="Toyota">Toyota</option>
+        <option value="Honda">Honda</option>
+        <option value="Maruti">Maruti</option>
+    </select>
+
+    <label for="fuel_type">Fuel Type</label>
+    <select name="fuel_type" id="fuel_type">
+        <option value="Petrol">Petrol</option>
+        <option value="Diesel">Diesel</option>
+        <option value="Electric">Electric</option>
+        
+    </select>
+
+    
+</div>
+
+<!-- Mobiles Fields -->
+<div id="mobilesFields" class="category-fields">
+    <label for="mobile_brand">Brand<span class="mandatory">*</span></label>
+    <select name="mobile_brand" id="mobile_brand">
+        <option value="">Select Brand</option>
+        <option value="apple">Apple</option>
+        <option value="samsung">Samsung</option>
+        <option value="oneplus">OnePlus</option>
+        <option value="mi">Mi</option>
+        <option value="oppo">oppo</option>
+
+
+    </select>
+
+    
+</div>
+
+<!-- Bikes Fields -->
+<div id="bikesFields" class="category-fields">
+    <label for="bike_brand">Brand<span class="mandatory">*</span></label>
+    <select name="bike_brand" id="bike_brand">
+        <option value="">Select Brand</option>
+        <option value="yamaha">Yamaha</option>
+        <option value="honda">Honda</option>
+        <option value="royal_enfield">Royal Enfield</option>
+        <option value="himalayan">Himalayan</option>
+        <option value="jawa">Jawa</option>
+
+    </select>
+</div>
+
+<!-- Cameras Fields -->
+<div id="camerasFields" class="category-fields">
+    <label for="camera_brand">Brand</label>
+    <input type="text" id="camera_brand" name="camera_brand" placeholder="Enter Brand">
+
+    
+</div>
+
+<!-- Electronics & Appliances -->
+<div id="electronicsFields" class="category-fields">
+    <label for="electronics_type">Type</label>
+    <input type="text" id="electronics_type" name="electronics_type" placeholder="Enter Type">
+
+    
+</div>
+
+<!-- Furniture -->
+<div id="furnitureFields" class="category-fields">
+    <label for="furniture_type">Type</label>
+    <input type="text" id="furniture_type" name="furniture_type" placeholder="Enter Type">
+
+    
+</div>
+
+<!-- Food Utensils -->
+<div id="foodUtensilsFields" class="category-fields">
+    <label for="utensils_type">Type</label>
+    <input type="text" id="utensils_type" name="utensils_type" placeholder="Enter Type">
+    
+    <label for="utensils_condition">Condition</label>
+    <select name="utensils_condition" id="utensils_condition">
+        <option value="new">New</option>
+        <option value="used">Used</option>
+    </select>
+</div>
+
+<!-- Fashion -->
+<div id="fashionFields" class="category-fields">
+    <label for="fashion_type">Type</label>
+    <input type="text" id="fashion_type" name="fashion_type" placeholder="Enter Type">
+
+    
+</div>
+
+<!-- Properties -->
+<div id="propertiesFields" class="category-fields">
+    <label for="property_type">Type</label>
+    <input type="text" id="property_type" name="property_type" placeholder="Enter Type">
+</div>
+
+<!-- Services -->
+<div id="servicesFields" class="category-fields">
+    <label for="service_type">Type</label>
+    <input type="text" id="service_type" name="service_type" placeholder="Enter Type">
+</div>
+
+<!-- Books -->
+<div id="booksFields" class="category-fields">
+    <label for="book_title">Title</label>
+    <input type="text" id="book_title" name="book_title" placeholder="Enter Title">
+
+    
+</div>
+
+<!-- Agriculture -->
+<div id="agricultureFields" class="category-fields">
+    <label for="agriculture_type">Type</label>
+    <input type="text" id="agriculture_type" name="agriculture_type" placeholder="Enter Type">
+</div>
+
+<!-- Miscellaneous -->
+<div id="miscellaneousFields" class="category-fields">
+    <label for="miscellaneous_type">Type</label>
+    <input type="text" id="miscellaneous_type" name="miscellaneous_type" placeholder="Enter Type">
+</div>
+
+<!-- Sports -->
+<div id="sportsFields" class="category-fields">
+    <label for="sports_type">Type</label>
+    <input type="text" id="sports_type" name="sports_type" placeholder="Enter Type">
+</div>
+
+<!-- Offices -->
+<div id="officesFields" class="category-fields">
+    <label for="office_type">Type</label>
+    <input type="text" id="office_type" name="office_type" placeholder="Enter Type">
+</div>
+
+<!-- Vacation Rentals -->
+<div id="vacationRentalsFields" class="category-fields">
+    <label for="rental_type">Type</label>
+    <input type="text" id="rental_type" name="rental_type" placeholder="Enter Type">
+</div>
+
+<label for="price">Price?</label>
+    <input type="number" id="price" name="price" placeholder="Price">
+            <label for="imageInput">Upload up to 5 Photos:</label>
+            <input type="file" name="images" id="imageInput" accept="image/jpeg, image/png, image/webp" multiple required><br>
+            <div class="preview" id="imagePreview"></div>
+
+            <label>Description:</label>
+            <textarea name="description" id="description" rows="4" required></textarea>
+
+            <!-- Location (manual entry option) -->
+           <label for="location">Location:</label>
+           <input type="text" id="location" name="location" placeholder="Enter your city or area" required>
+
+    <!-- Or auto-detect button -->
+    <button type="button" onclick="getCurrentLocation()">Use My Current Location</button>
+
+
+            <button type="submit">Post Ad</button>
+        </form>
+
+        <div id="adsContainer"></div>
+    </div>
+
+    <script>
+        function updateFormFields() {
+            const selectedCategory = document.getElementById("categorySelect").value;
+            document.querySelectorAll(".category-fields").forEach(field => field.style.display = "none");
+            if (selectedCategory) {
+                const selectedFields = document.getElementById(selectedCategory + "Fields");
+                if (selectedFields) selectedFields.style.display = "block";
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", updateFormFields);
+
+        document.getElementById("imageInput").addEventListener("change", function(event) {
+            const preview = document.getElementById("imagePreview");
+            preview.innerHTML = "";  
+            if (this.files.length > 5) {
+                alert("You can only upload up to 5 images.");
+                this.value = "";  
+                return;
+            }
+            Array.from(this.files).forEach(file => {
+                const img = document.createElement("img");
+                img.src = URL.createObjectURL(file);
+                preview.appendChild(img);
+            });
+        });
+
+        document.getElementById("adForm").addEventListener("submit", async function(event) {
+            event.preventDefault();
+            
+            const formData = new FormData(this);
+
+            // Get all brand fields
+            const carBrand = this.elements['car_brand']?.value;
+            const bikeBrand = this.elements['bike_brand']?.value;
+            const mobileBrand = this.elements['mobile_brand']?.value;
+            const cameraBrand = this.elements['camera_brand']?.value;
+
+            // Determine which one has a value (non-empty)
+            let brand = carBrand || bikeBrand || mobileBrand || cameraBrand || electronicsType || ""; // add more if needed
+
+            // Add it to formData (if not empty)
+            if (brand) {
+                formData.append("brand", brand);
+            }
+            
+            const response = await fetch("http://localhost:5000/post-ad", {
+                method: "POST",
+                body: formData
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                alert("Ad Posted Successfully!");
+                loadAds();  
+                this.reset();
+                document.getElementById("imagePreview").innerHTML = ""; 
+            } else {
+                alert("Error posting ad.");
+            }
+        });
+
+        async function loadAds() {
+            const response = await fetch("http://localhost:5000/get-ads");
+            const ads = await response.json();
+            const container = document.getElementById("adsContainer");
+            container.innerHTML = "";  
+            ads.forEach(ad => {
+                const adDiv = document.createElement("div");
+                adDiv.classList.add("ad-card");
+                adDiv.innerHTML = `<strong>Category:</strong> ${ad.category}<br>
+                    <strong>Description:</strong> ${ad.description}<br>
+                    ${ad.images.map(img => `<img src="http://localhost:5000/uploads/${img}" width="100">`).join('')}`;
+                container.appendChild(adDiv);
+            });
+        }
+
+        loadAds();
+        // Toggle sidebar menu
+        function toggleMenu() {
+            const menu = document.getElementById("leftMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            menu.classList.toggle("active");
+            menuIcon.classList.toggle("hidden");
+        }
+
+        // Close menu function
+        function closeMenu() {
+            const menu = document.getElementById("leftMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            menu.classList.remove("active");
+            menuIcon.classList.remove("hidden");
+        }
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            const menu = document.getElementById("leftMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            if (!menu.contains(e.target) && !menuIcon.contains(e.target)) {
+                closeMenu();
+            }
+        });
+    
+        // Get current location & fill the input
+function getCurrentLocation() {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(async (position) => {
+            const lat = position.coords.latitude;
+            const lon = position.coords.longitude;
+
+            // OPTIONAL: Use reverse geocoding to get human-readable address
+            // For simplicity, we'll just show lat/lon here
+            const locationField = document.getElementById("location");
+            locationField.value = `Lat: ${lat}, Lon: ${lon}`;
+
+            // You can replace this with a real address by calling a geocoding API like OpenCage or Google Maps.
+        }, () => {
+            alert("Unable to retrieve your location.");
+        });
+    } else {
+        alert("Geolocation is not supported by this browser.");
+    }
+}
+
+
+    </script>
+</body>
+</html>

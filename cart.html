@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Rentsphere - Your Cart</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+  <link rel="stylesheet" href="cart1.css">
+
+</head>
+
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-container">
+      <div class="header-left">
+        <div class="logo">
+          <div class="logo-text">Rentsphere</div>
+        </div>
+      </div>
+      <div class="header-right">
+        <nav>
+          <ul>
+            <li><a href="Home.html">Home</a></li>
+            <li><a href="Account.html">Account</a></li>
+            <li><a href="signup.html">Sign In</a></li>
+          </ul>
+        </nav>
+        <div class="cart-icon">
+          <i class="fas fa-shopping-cart"></i>
+          <span class="cart-count">0</span>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Content -->
+  <main>
+    <!-- Cart Section -->
+    <div class="cart-container">
+      <div class="cart-header">
+        <h1>Your cart</h1>
+        <p id="items-info">Loading items...</p>
+      </div>
+      <div class="cart-items" id="cart-items-container">
+        <!-- Items will be injected by JS -->
+      </div>
+    </div>
+
+    <!-- Summary Section -->
+<div class="summary-container">
+  <div class="summary">
+    <h2>Summary</h2>
+
+    <div class="summary-row">
+      <span>Subtotal</span>
+      <span id="subtotal">$0.00</span>
+    </div>
+
+    <div class="summary-divider"></div>
+
+    <div class="summary-total">
+      <span>Total</span>
+      <span id="total">$0.00</span>
+    </div>
+
+    <!-- Pay Now Button -->
+    <button class="checkout-btn" id="checkout-btn">Pay Now</button>
+  </div>
+</div>
+
+    
+    <!-- Chat Widget -->
+    <div class="chat-widget">
+      <div class="chat-icon">
+        <i class="fas fa-comment-dots"></i>
+      </div>
+    </div>
+    
+<!-- Chat Box -->
+<div class="chat-box">
+  <div class="chat-header">RentSphere AI Assistant</div>
+  <div class="chat-messages"></div>
+  <div class="chat-input">
+    <input type="text" placeholder="Ask me something..." id="userInput">
+    <button id="sendButton">Send</button>
+  </div>
+</div>
+
+  <!-- JavaScript Code -->
+  <script>
+    const apiBaseUrl = 'http://localhost:5000';
+    let cartData = { items: [] };
+
+    // Run these when the page finishes loading
+    document.addEventListener('DOMContentLoaded', () => {
+      fetchCartItems();
+    });
+
+    // Fetch cart items from the backend
+    async function fetchCartItems() {
+      try {
+        const res = await fetch(`${apiBaseUrl}/cart`);
+        cartData = await res.json();
+        displayCartItems();
+        updateCartCount();
+      } catch (error) {
+        console.error("Error fetching cart items:", error);
+        // Fallback to sample data if API is unavailable
+        useSampleData();
+      }
+    }
+
+    
+
+    // Display cart items in the UI
+    function displayCartItems() {
+      const cartItemsContainer = document.getElementById('cart-items-container');
+      const itemsInfo = document.getElementById('items-info');
+      cartItemsContainer.innerHTML = '';
+
+      if (!cartData.items || cartData.items.length === 0) {
+        itemsInfo.textContent = "Your cart is empty.";
+        document.getElementById('subtotal').textContent = "$0.00";
+        document.getElementById('total').textContent = "$0.00";
+        return;
+      }
+
+      const totalItems = cartData.items.reduce((acc, item) => acc + item.quantity, 0);
+      itemsInfo.textContent = `${totalItems} item(s) in your cart`;
+
+      let subtotal = 0;
+
+      cartData.items.forEach(item => {
+        const { itemId, quantity } = item;
+        const itemTotalPrice = itemId.price * quantity;
+        subtotal += itemTotalPrice;
+
+        const cartItem = document.createElement('div');
+        cartItem.className = 'cart-item';
+        cartItem.innerHTML = `
+          <div class="item-image">
+            <img src="${tryGetImage(itemId)}" alt="${itemId.title}" />
+          </div>
+          <div class="item-details">
+            <div class="item-info">
+              <h3>${itemId.title}</h3>
+              <p>${quantity} item(s)</p>
+              <div class="quantity-controls">
+                <button class="quantity-button decrease-quantity" data-id="${itemId._id}">-</button>
+                <input type="number" class="quantity-input" value="${quantity}" min="1" data-id="${itemId._id}">
+                <button class="quantity-button increase-quantity" data-id="${itemId._id}">+</button>
+              </div>
+            </div>
+            <div class="item-price">$${itemTotalPrice.toFixed(2)}</div>
+            <button class="remove-item" data-id="${itemId._id}">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+        cartItemsContainer.appendChild(cartItem);
+      });
+
+      document.getElementById('subtotal').textContent = `$${subtotal.toFixed(2)}`;
+      document.getElementById('total').textContent = `$${subtotal.toFixed(2)}`;
+      
+      // Add event listeners after generating the items
+      addEventListeners();
+    }
+
+    // Helper function to get the appropriate image URL
+    function tryGetImage(itemId) {
+      if (itemId.images && itemId.images.length > 0) {
+        // Check if the image starts with http or https
+        if (itemId.images[0].startsWith('http')) {
+          return itemId.images[0];
+        }
+        return `${apiBaseUrl}/uploads/${itemId.images[0]}`;
+      }
+      return "https://via.placeholder.com/150";
+    }
+
+    // Update the cart item count in the header icon
+    function updateCartCount() {
+      const totalItems = cartData.items.reduce((acc, item) => acc + item.quantity, 0);
+      const cartCountSpan = document.querySelector('.cart-count');
+      cartCountSpan.textContent = totalItems;
+    }
+
+    // Add event listeners for quantity controls and remove buttons
+    function addEventListeners() {
+      // Decrease quantity buttons
+      document.querySelectorAll('.decrease-quantity').forEach(button => {
+        button.addEventListener('click', async function() {
+          const id = this.getAttribute('data-id');
+          const itemIndex = cartData.items.findIndex(item => item.itemId._id === id);
+          
+          if (itemIndex !== -1 && cartData.items[itemIndex].quantity > 1) {
+            cartData.items[itemIndex].quantity--;
+            await updateItemQuantity(id, cartData.items[itemIndex].quantity);
+            displayCartItems();
+            updateCartCount();
+          }
+        });
+      });
+
+      // Increase quantity buttons
+      document.querySelectorAll('.increase-quantity').forEach(button => {
+        button.addEventListener('click', async function() {
+          const id = this.getAttribute('data-id');
+          const itemIndex = cartData.items.findIndex(item => item.itemId._id === id);
+          
+          if (itemIndex !== -1) {
+            cartData.items[itemIndex].quantity++;
+            await updateItemQuantity(id, cartData.items[itemIndex].quantity);
+            displayCartItems();
+            updateCartCount();
+          }
+        });
+      });
+
+      // Quantity input fields
+      document.querySelectorAll('.quantity-input').forEach(input => {
+        input.addEventListener('change', async function() {
+          const id = this.getAttribute('data-id');
+          const quantity = parseInt(this.value);
+          const itemIndex = cartData.items.findIndex(item => item.itemId._id === id);
+          
+          if (itemIndex !== -1 && quantity > 0) {
+            cartData.items[itemIndex].quantity = quantity;
+            await updateItemQuantity(id, quantity);
+            displayCartItems();
+            updateCartCount();
+          } else {
+            this.value = cartData.items[itemIndex].quantity;
+          }
+        });
+      });
+
+      // Remove buttons
+      document.querySelectorAll('.remove-item').forEach(button => {
+        button.addEventListener('click', function() {
+          const id = this.getAttribute('data-id');
+          removeFromCart(id);
+        });
+      });
+
+      document.getElementById('checkout-btn').addEventListener('click', function() {
+        const total = document.getElementById('total').textContent;
+        
+        // Show an alert with the total amount
+        alert(`Proceeding to checkout with items worth ${total}`);
+        
+        // Redirect to the payment and transaction page
+        window.location.href = "payment&Transcation.html";
+      });
+    }
+    // Update item quantity in the cart
+    async function updateItemQuantity(itemId, quantity) {
+      try {
+        const response = await fetch(`${apiBaseUrl}/cart/update`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ itemId, quantity })
+        });
+
+        const result = await response.json();
+        
+        if (!response.ok) {
+          console.error("Failed to update item quantity:", result.message);
+          // Revert to previous state or refresh from server
+          await fetchCartItems();
+        }
+      } catch (error) {
+        console.error("Error updating item quantity:", error);
+        // Continue with local update for better UX when API is unavailable
+      }
+    }
+
+  // Remove an item from the cart and update the UI
+async function removeFromCart(itemId) {
+  try {
+    const response = await fetch(`${apiBaseUrl}/cart/remove`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ itemId })
+    });
+
+    const result = await response.json();
+
+    if (response.ok) {
+      // Remove item from local cart data
+      cartData.items = cartData.items.filter(item => item.itemId._id !== itemId);
+      displayCartItems();
+      updateCartCount();
+    } else {
+      console.error("Failed to remove item:", result.message);
+      alert("Failed to remove item: " + result.message);
+    }
+  } catch (error) {
+    console.error("Error removing item:", error);
+    
+    // Since we're getting a network error, we should handle this gracefully
+    // Option 1: Proceed with client-side removal anyway for better UX
+    const confirmRemove = confirm("Network error detected. Would you like to remove the item from your view anyway? (Note: It may reappear when you reload the page)");
+    
+    if (confirmRemove) {
+      cartData.items = cartData.items.filter(item => item.itemId._id !== itemId);
+      displayCartItems();
+      updateCartCount();
+    }
+  }
+}
+    // After modifying the cart locally
+localStorage.setItem('cartData', JSON.stringify(cartData));
+
+// And on page load
+const savedCart = localStorage.getItem('cartData');
+if (savedCart) {
+  cartData = JSON.parse(savedCart);
+  displayCartItems();
+  updateCartCount();
+}
+
+const chatWidget = document.querySelector('.chat-widget');
+    const chatBox = document.querySelector('.chat-box');
+    const chatIcon = document.querySelector('.chat-icon');
+    const sendButton = document.getElementById('sendButton');
+    const userInput = document.getElementById('userInput');
+    const chatMessages = document.querySelector('.chat-messages');
+
+    // Toggle Chat Box
+    chatIcon.addEventListener('click', () => {
+      chatBox.style.display = chatBox.style.display === 'flex' ? 'none' : 'flex';
+    });
+
+    // Send Message
+    sendButton.addEventListener('click', () => {
+      const message = userInput.value.trim();
+      if (message === '') return;
+
+      addMessage('user', message);
+      userInput.value = '';
+
+      setTimeout(() => {
+        const reply = getBotReply(message);
+        addMessage('bot', reply);
+      }, 500);
+    });
+
+    // Add Message to Chat
+    function addMessage(sender, message) {
+      const messageDiv = document.createElement('div');
+      messageDiv.classList.add(sender === 'user' ? 'user-message' : 'bot-message');
+      messageDiv.textContent = message;
+      chatMessages.appendChild(messageDiv);
+      chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+
+    // Basic AI Bot Responses
+    function getBotReply(userMsg) {
+      const msg = userMsg.toLowerCase();
+
+      if (msg.includes('hello') || msg.includes('hi')) {
+        return 'Hello! How can I help you with RentSphere today?';
+      }
+
+      if (msg.includes('rent') && msg.includes('house')) {
+        return 'We offer a variety of rental houses. You can browse available properties in the Rent section!';
+      }
+
+      if (msg.includes('payment') || msg.includes('pay')) {
+        return 'You can make payments securely via Razorpay on RentSphere.';
+      }
+
+      if (msg.includes('contact') || msg.includes('support')) {
+        return 'You can reach our support team at support@rentsphere.com or call 1800-123-456.';
+      }
+
+      if (msg.includes('location') || msg.includes('where')) {
+        return 'RentSphere currently offers rental services across major cities in India like Nagpur, Mumbai, Delhi, and Bangalore.';
+      }
+
+      if (msg.includes('thank')) {
+        return 'You’re welcome! Feel free to ask anything about RentSphere.';
+      }
+
+      // Default reply
+      return 'I’m not sure about that. Please ask something else about RentSphere.';
+    }
+
+    // Press Enter to Send
+    userInput.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        sendButton.click();
+      }
+    });
+  </script>
+  
+</body>
+</html>

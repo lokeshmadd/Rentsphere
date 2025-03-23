@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login & Sign Up - Rent It</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Global Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color:  #e0eee8;
+        }
+
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+            transition: opacity 0.5s, transform 0.5s;
+        }
+
+        .form-container input {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background: #000;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background: #333;
+        }
+
+        .form-container a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+
+        /* Toggle between Sign-Up & Login */
+        .toggle-icon {
+            cursor: pointer;
+            font-size: 18px;
+            margin-top: 15px;
+            display: inline-block;
+        }
+
+        /* Initially show Sign-Up and hide Login */
+        #loginForm {
+            display: none;
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Sign-Up Form -->
+    <div class="form-container" id="signupForm">
+        <h2>Sign Up</h2>
+        <input type="text" id="signupName" placeholder="Full Name" required>
+        <input type="email" id="signupEmail" placeholder="Email" required>
+        <input type="password" id="signupPassword" placeholder="Password" required>
+        <button onclick="signup()">Sign Up</button>
+        <p>Already have an account? <span class="toggle-icon" onclick="toggleForms()">🔄 Login</span></p>
+    </div>
+
+    <!-- Login Form -->
+    <div class="form-container" id="loginForm">
+        <h2>Login</h2>
+        <input type="email" id="loginEmail" placeholder="Email" required>
+        <input type="password" id="loginPassword" placeholder="Password" required>
+        <button onclick="login()">Login</button>
+        <p>Don't have an account? <span class="toggle-icon" onclick="toggleForms()">🔄 Sign Up</span></p>
+    </div>
+
+    <script>
+        function toggleForms() {
+            let signupForm = document.getElementById("signupForm");
+            let loginForm = document.getElementById("loginForm");
+
+            if (signupForm.style.display === "none") {
+                signupForm.style.display = "block";
+                loginForm.style.display = "none";
+            } else {
+                signupForm.style.display = "none";
+                loginForm.style.display = "block";
+            }
+        }
+
+        function signup() {
+            let name = document.getElementById("signupName").value;
+            let email = document.getElementById("signupEmail").value;
+            let password = document.getElementById("signupPassword").value;
+
+            if (name && email && password) {
+                localStorage.setItem("userEmail", email);
+                localStorage.setItem("userPassword", password);
+                toggleForms();
+            } else {
+                alert("Please fill all fields.");
+            }
+        }
+
+        function login() {
+            let email = document.getElementById("loginEmail").value;
+            let password = document.getElementById("loginPassword").value;
+            let storedEmail = localStorage.getItem("userEmail");
+            let storedPassword = localStorage.getItem("userPassword");
+
+            if (email === storedEmail && password === storedPassword) {
+                window.location.href = "home.html"; // Redirect to Home Page
+            } else {
+                alert("Invalid email or password.");
+            }
+        }
+    </script>
+    
+
+</body>
+</html>

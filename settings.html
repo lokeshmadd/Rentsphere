@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Settings - Rentsphere</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color:  #e0eee8;
+        }
+
+        /* Sidebar Styles */
+        .menu-icon {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            z-index: 1001;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .menu-icon.hidden {
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .left-section {
+            position: fixed;
+            top: 0;
+            left: -300px;
+            width: 250px;
+            height: 100vh;
+            background: linear-gradient(135deg, #000000 0%, #000000 100%);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            padding: 20px;
+            transition: 0.3s;
+            z-index: 1000;
+        }
+
+        .left-section.active {
+            left: 0;
+        }
+
+        .nav-menu {
+            list-style: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .nav-menu li {
+            margin: 15px 0;
+        }
+
+        .nav-menu a {
+            color: rgb(255, 255, 255);
+            text-decoration: none;
+            font-size: 18px;
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+
+        .nav-menu a:hover {
+            background-color: #000000;
+        }
+
+        /* Settings Page Styles */
+        .main-content {
+            margin-left: 0;
+            padding: 20px;
+            transition: margin-left 0.3s;
+            max-width: 600px;
+            margin: 20px auto;
+        }
+
+        h1 {
+            color: #1a1a1a;
+            font-size: 24px;
+            margin-bottom: 30px;
+        }
+
+        .section-title {
+            color: #666;
+            font-size: 14px;
+            font-weight: 500;
+            margin: 25px 0 15px 0;
+        }
+
+        .menu-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 20px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .menu-item:last-child {
+            border-bottom: none;
+        }
+
+        .menu-item:hover {
+            background-color: #f8f8f8;
+        }
+
+        .menu-item span {
+            flex-grow: 1;
+            color: #333;
+        }
+
+        .menu-item::after {
+            content: '›';
+            color: #ccc;
+            font-size: 20px;
+        }
+
+        .danger {
+            color: #ff3b30 !important;
+        }
+
+        .icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 15px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .icon.danger {
+            stroke: #ff3b30;
+        }
+
+        /* Content page styles */
+        .content-page {
+            display: none;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
+
+        .content-page.active {
+            display: block;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Menu Icon -->
+    <div class="menu-icon" id="menuIcon" onclick="toggleMenu()">☰</div>
+
+    <!-- Sidebar -->
+    <div class="left-section" id="leftMenu">
+        <h2>Rentsphere</h2>
+        <ul class="nav-menu">
+            <li><a href="Home.html" onclick="showSection('home')">🏠 Home</a></li>
+            <li><a href="Account.html" onclick="showSection('profile')">👤 Account</a></li>
+            <li><a href="Myrentals.html" onclick="showSection('My-Rentals')">📦 My Rentals</a></li> 
+            <li><a href="categories.html" onclick="showSection('categories')">📊 Categories</a></li>
+            <li><a href="postaRental.html" onclick="showSection('Post-a-Rental')">➕ Post a Rentals</a></li>
+            <li><a href="Notifications.html" onclick="showSection('notifications')">🔔 Notifications</a></li>
+            <li><a href="RentalAgreement.html" onclick="showSection('rental-agreement')">📜 Rental Agreement</a></li>
+            <li><a href="payment&Transcation.html" onclick="showSection('payment')">💳 Payment & Transcation</a></li>
+            <li><a href="help.html" onclick="showSection('help')">❓ Help</a></li>
+            <li><a href="Terms&policies.html" onclick="showSection('&ptermsolicies')">⚖️ Terms & policies</a></li>
+            <li><a href="settings.html" onclick="showSection('settings')">⚙️ Settings</a></li>
+
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="main-content">
+        <!-- Settings Page -->
+        <div id="settings-page">
+            <h1>Settings</h1>
+            
+            <div class="section-title">GENERAL</div>
+            <ul class="menu-list">
+                <a href="account.html" class="menu-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <circle cx="12" cy="8" r="4"/>
+                        <path d="M20 21a8 8 0 10-16 0"/>
+                    </svg>
+                    <span>Account</span>
+                </a>
+                <a href="notifications.html" class="menu-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                        <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                    </svg>
+                    <span>Notifications</span>
+                </a>
+                <a href="coupons.html" class="menu-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M4 7V4h16v3"/>
+                        <path d="M4 20v-3h16v3"/>
+                        <path d="M4 12h16"/>
+                        <path d="M9 12V4"/>
+                        <path d="M15 20v-8"/>
+                    </svg>
+                    <span>Coupons</span>
+                </a>
+                <a href="#" class="menu-item" id="logout-btn">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" y1="12" x2="9" y2="12"/>
+                    </svg>
+                    <span>Logout</span>
+                </a>
+                <a href="#" class="menu-item" id="delete-btn">
+                    <svg class="icon danger" viewBox="0 0 24 24">
+                        <polyline points="3 6 5 6 21 6"/>
+                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
+                    </svg>
+                    <span class="danger">Delete account</span>
+                </a>
+            </ul>
+
+            <div class="section-title">FEEDBACK</div>
+            <ul class="menu-list">
+                <a href="report-bug.html" class="menu-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <path d="M12 1L1 8l11 7 11-7-11-7z"/>
+                        <path d="M1 16l11 7 11-7"/>
+                        <path d="M1 12l11 7 11-7"/>
+                    </svg>
+                    <span>Report a bug</span>
+                </a>
+                <a href="feedback.html" class="menu-item">
+                    <svg class="icon" viewBox="0 0 24 24">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                    <span>Send feedback</span>
+                </a>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // Toggle sidebar menu
+        function toggleMenu() {
+            const menu = document.getElementById("leftMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            menu.classList.toggle("active");
+            menuIcon.classList.toggle("hidden");
+        }
+
+        // Close menu function
+        function closeMenu() {
+            const menu = document.getElementById("leftMenu");
+            const menuIcon = document.getElementById("menuIcon");
+            menu.classList.remove("active");
+            menuIcon.classList.remove("hidden");
+        }
+
+        // Navigation handling
+        document.addEventListener('DOMContentLoaded', function() {
+            // Logout button handler
+            document.getElementById('logout-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                if(confirm('Are you sure you want to logout?')) {
+                    console.log('Logging out...');
+                    window.location.href = 'login.html';
+                }
+            });
+
+            // Delete account button handler
+            document.getElementById('delete-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                if(confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+                    console.log('Deleting account...');
+                }
+            });
+
+            // Handle navigation for menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                if (!item.id) { // Skip logout and delete buttons
+                    item.addEventListener('click', function(e) {
+                        const href = this.getAttribute('href');
+                        if (href && href !== '#') {
+                            e.preventDefault();
+                            console.log(`Navigating to ${href}...`);
+                            window.location.href = href;
+                        }
+                    });
+                }
+            });
+
+            // Close menu when clicking outside
+            document.addEventListener('click', function(e) {
+                const menu = document.getElementById("leftMenu");
+                const menuIcon = document.getElementById("menuIcon");
+                if (!menu.contains(e.target) && !menuIcon.contains(e.target)) {
+                    closeMenu();
+                }
+            });
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Login - Rent It</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color:  #e0eee8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .form-container {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .form-container h2 {
+            margin-bottom: 20px;
+        }
+
+        .form-container input {
+            width: 95%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .form-container button {
+            width: 100%;
+            padding: 10px;
+            background: #12bc29;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .form-container button:hover {
+            background: #333;
+        }
+
+        .form-container .remember-me {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin: 10px 0;
+        }
+
+        .form-container p {
+            margin-top: 10px;
+        }
+
+        .form-container a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Email" required />
+        <input type="password" id="password" placeholder="Password" required />
+        
+        <div class="remember-me">
+            <label><input type="checkbox" id="rememberMe" /> Remember Me</label>
+            <a href="#">Forgot Password?</a>
+        </div>
+
+        <button onclick="login()">Login</button>
+        <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+    </div>
+
+    <script>
+        function login() {
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value.trim();
+
+            if (!email || !password) {
+                alert("Please enter both email and password!");
+                return;
+            }
+
+            // Optional: Password validation (same as signup page if you want)
+            const passwordRegex = /^(?=.*[A-Z]).{8,}$/;
+            if (!passwordRegex.test(password)) {
+                alert("Password must be at least 8 characters long and contain at least one uppercase letter.");
+                return;
+            }
+
+            // Retrieve stored user (for testing with localStorage)
+            const storedUser = JSON.parse(localStorage.getItem("user"));
+
+            if (!storedUser) {
+                alert("No user found. Please sign up first.");
+                return;
+            }
+
+            // Validate email and password
+            if (storedUser.email === email && storedUser.password === password) {
+                alert("Login successful!");
+
+                // Optional: Store login status in localStorage/sessionStorage
+                if (document.getElementById("rememberMe").checked) {
+                    localStorage.setItem("loggedIn", "true");
+                } else {
+                    sessionStorage.setItem("loggedIn", "true");
+                }
+
+                // Redirect to home.html
+                window.location.href = "home.html";
+            } else {
+                alert("Incorrect email or password.");
+            }
+        }
+    </script>
+</body>
+</html>
