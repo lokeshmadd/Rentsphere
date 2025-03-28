@@ -668,10 +668,12 @@ app.post('/verify-payment', async (req, res) => {
 // DEFAULT ROUTE
 /////////////////////////////////////////////////
 
+// Serve static files from the 'public' directory
 app.use(express.static(path.join(__dirname, "public")));
 
+// Route to serve home.html
 app.get("/", (req, res) => {
-    res.sendFile(path.join(__dirname, "public", "home.html")); // Change from index.html to home.html
+    res.sendFile(path.join(__dirname, "public", "home.html"));
 });
 /////////////////////////////////////////////////
 // START SERVER
