@@ -64,14 +64,28 @@
     </div>
 
     <script>
-        function logoutUser() {
-            // Clear session storage & local storage (optional)
-            sessionStorage.clear();
-            localStorage.removeItem("userToken"); // Remove token if used
-
-            // Redirect to login page
-            window.location.href = "login.html"; // Change to your actual login page
-        }
+        window.onload = async function () {
+            try {
+                const response = await fetch('/api/logout', {
+                    method: 'POST',
+                    credentials: 'include' // Ensures cookies are sent
+                });
+        
+                // If logout is successful, redirect to login page
+                if (response.ok) {
+                    window.location.href = "/login.html";
+                } else {
+                    console.error('Logout failed');
+                    showToast('Logout failed. Please try again.');
+                    setTimeout(() => window.location.href = "/login.html", 2000); // Redirect after 2s
+                }
+            } catch (error) {
+                console.error('Error during logout:', error);
+                showToast('Error logging out. Please try again.');
+                setTimeout(() => window.location.href = "/login.html", 2000);
+            }
+        };
+        
     </script>
 
 </body>
