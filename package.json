@@ -2,20 +2,25 @@
   "name": "sphere",
   "version": "1.0.0",
   "description": "",
-  "main": "login.js",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "dev": "node --watch server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@vercel/blob": "^0.27.3",
+    "bcrypt": "^5.1.1",
+    "cookie-parser": "^1.4.7",
     "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
     "ejs": "^3.1.10",
     "express": "^4.21.2",
-    "mongoose": "^8.12.1",
+    "jsonwebtoken": "^9.0.2",
+    "mongoose": "^8.13.0",
     "multer": "^1.4.5-lts.1",
-    "path": "^0.12.7",
     "razorpay": "^2.9.6"
   }
 }
