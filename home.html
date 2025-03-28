@@ -128,15 +128,16 @@
 
         <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-<!-- Add the account icon somewhere in your home page header -->
-
-<a href="account.html" class="account-icon">
-    <svg viewBox="0 0 24 24">
-      <circle cx="12" cy="8" r="4"/>
-      <path d="M20 21a8 8 0 10-16 0"/>
-    </svg>
-  </a>
-
+ <!-- Compact Login/Signup Container (Top-Right) -->
+ <div class="auth-container">
+    <a href="login.html">
+        <i class="ph ph-sign-in"></i> Login
+    </a>
+    <span>|</span> <!-- Divider -->
+    <a href="signup.html">
+        <i class="ph ph-user-plus"></i> Sign Up
+    </a>
+</div>
 
 <!-- Cart Icon -->
 <a href="cart.html" class="cart-icon">
@@ -153,29 +154,35 @@
             </div>
         </div>
         
-
         <div class="modal fade" id="postModal" tabindex="-1" aria-labelledby="postModalLabel">
             <div class="modal-dialog modal-lg">
-              <div class="modal-content-inner">
-                <div class="modal-header">
-                  <h5 class="modal-title" id="postTitle">Post Title</h5>
-                  <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                  <img id="postImage" src="" class="img-fluid mb-3" alt="Post Image">
-                  <div class="inner-modal-show">
-                    <div class="inner-left-modal">
-                      <div id="postDescription">Post details will appear here...</div>
+                <div class="modal-content-inner">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="postTitle">Post Title</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
-                    <div class="inner-right-modal">
-                      <div>Price: $<span id="postPrice" data-item-id="12345">100</span></div>
-                      <button class="rbutton" id="addToCartBtn">Add to Cart</button>
+                    <div class="modal-body">
+                        <img id="postImage" src="" class="img-fluid mb-3" alt="Post Image">
+                        <div class="inner-modal-show">
+                            <div class="inner-left-modal">
+                                <div id="postDescription">Post details will appear here...</div>
+                            </div>
+                            <div class="inner-right-modal">
+                                <div>Price: $<span id="postPrice"></span></div>
+                                <button class="rbutton" id="addToCartBtn">Add to Cart</button>
+                            </div>
+                        </div>
+                        <hr> 
+                        <h5>Seller Information</h5>
+                        <p><strong>Name:</strong> <span id="contactName"></span></p>
+                        <p><strong>Email:</strong> <span id="contactEmail"></span></p>
+                        <p><strong>Phone:</strong> <span id="contactPhone"></span></p>
                     </div>
-                  </div>
                 </div>
-              </div>
             </div>
-          </div>
+        </div>
+        
+ </div>
           
     
     <footer>
@@ -224,7 +231,7 @@
 
         // Fetch and display ads from the backend
         async function fetchAds() {
-            const response = await fetch("http://localhost:5000/get-ads");
+            const response = await fetch("https://sphere.vercel.app/get-ads");
             const ads = await response.json();
             const adsList = document.getElementById("adsList");
 
@@ -232,7 +239,9 @@
                 <div class="col-md-4">
                     <div class="card ad-card post-item" data-title="${ad.category}" data-description="${ad.description}" data-images='${JSON.stringify(ad.images)}' data-price='${JSON.stringify(ad.price)}' data-adId='${JSON.stringify(ad._id)}'>
                         <div class="images">
-                            ${ad.images.map(image => `<img src="http://localhost:5000/uploads/${image}" alt="Ad Image">`).join('')}
+                            ${ad.images.map(image => 
+                                `<img src="${image.startsWith('https://') ? image : `https://sphere.vercel.app/uploads/${image}`}" alt="Ad Image">`
+                            ).join('')}
                         </div>
                         <p><strong>Brand:</strong> ${ad.brand}</p>
                         <p><strong>Price:</strong> $${ad?.price || 20000}</p>
@@ -246,7 +255,7 @@
 
             // Load ads into the Recent Ads section
             async function loadAds() {
-                const res = await fetch('http://localhost:5000/items');
+                const res = await fetch('https://sphere.vercel.app/items');
                 const ads = await res.json();
                 const adsList = document.getElementById('adsList');
             
@@ -268,11 +277,13 @@
             
             // Open the modal and populate data
             async function openModal(adId) {
-                const res = await fetch(`http://localhost:5000/items/${adId}`);
+                const res = await fetch(`https://sphere.vercel.app/items/${adId}`);
                 const ad = await res.json();
                 document.getElementById('postTitle').innerText = ad.name;
                 document.getElementById('postPrice').innerText = ad.price;
-                document.getElementById('postImage').src = ad.image;
+                image = ad.image;
+                image = image.startsWith('https://') ? image : `https://sphere.vercel.app/uploads/${image}`;
+                document.getElementById('postImage').src = image;
                 document.getElementById('postDescription').innerText = ad.description;
                 document.getElementById('postPrice').attributes['data-item-id'].value = ad._id;
              
@@ -296,7 +307,9 @@
 
                     document.getElementById("postTitle").textContent = title;
                     document.getElementById("postDescription").textContent = description;
-                    document.getElementById("postImage").src = "http://localhost:5000/uploads/" + images[0];
+                    image = images[0];
+                    image = image.startsWith('https://') ? image : `https://sphere.vercel.app/uploads/${image}`;
+                    document.getElementById("postImage").src = image;
                     document.getElementById("postPrice").textContent = price;
                     document.getElementById("postPrice").dataset.itemId = adId;
 
@@ -311,7 +324,7 @@
                 console.log("Loading cart...");
             
                 try {
-                    const res = await fetch('http://localhost:5000/cart');
+                    const res = await fetch('https://sphere.vercel.app/cart');
                     const cart = await res.json();
             
                     console.log("Cart data received:", cart);
@@ -360,7 +373,7 @@
                 console.log("Attempting to add item to cart. Item ID:", adId);
 
                 try {
-                    const response = await fetch('http://localhost:5000/cart/add', {
+                    const response = await fetch('https://sphere.vercel.app/cart/add', {
                         method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
                         body: JSON.stringify({ itemId: adId })
@@ -706,7 +719,7 @@
             }
         });
 
-const apiBaseUrl = 'http://localhost:5000';
+const apiBaseUrl = 'https://sphere.vercel.app';
 
 // Add item to cart
 async function addToCart(itemId, quantity = 1) {
@@ -850,7 +863,7 @@ function performSearch() {
             console.log("Starting checkout...");
         
             try {
-                const res = await fetch('http://localhost:5000/cart/checkout', {
+                const res = await fetch('https://sphere.vercel.app/cart/checkout', {
                     method: 'POST'
                 });
         
@@ -892,6 +905,43 @@ function performSearch() {
 
           
          src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+
+         
+         async function fetchAdDetails(adId) {
+            try {
+                const response = await fetch(`/api/ad/${adId}`);
+                const ad = await response.json();
+        
+                if (!response.ok) {
+                    throw new Error(ad.message || "Error fetching ad details");
+                }
+        
+                // Show Ad Details in Modal
+                document.getElementById("postTitle").innerText = ad.title;
+                document.getElementById("postDescription").innerText = ad.description;
+                document.getElementById("postPrice").innerText = `$${ad.price}`;
+                document.getElementById("postImage").src = ad.images.length > 0 ? `/uploads/${ad.images[0]}` : 'default.jpg';
+        
+                // Show Seller Information
+                if (ad.postedBy) {
+                    document.getElementById("contactName").innerText = ad.postedBy.name;
+                    document.getElementById("contactEmail").innerText = ad.postedBy.email;
+                    document.getElementById("contactPhone").innerText = ad.postedBy.phone || "Not provided";
+                } else {
+                    document.getElementById("contactInfo").innerHTML = "<p>No seller information available</p>";
+                }
+        
+                // Show Modal
+                const postModal = new bootstrap.Modal(document.getElementById('postModal'));
+                postModal.show();
+        
+            } catch (error) {
+                console.error("Error fetching ad details:", error);
+                document.getElementById("contactInfo").innerHTML = "<p>Failed to load seller information.</p>";
+            }
+        }
+        
+
 
   </script>
 
