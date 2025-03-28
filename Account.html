@@ -311,7 +311,7 @@
         <div class="profile-section">
             <div class="profile-pic-container">
                 <div class="profile-pic">
-                    <img src="/api/placeholder/80/80" alt="Profile Picture" id="profileImage">
+                    <img src="/uploads/1739862566127.png" alt="Profile Picture" id="profileImage">
                     <input type="file" id="fileInput" accept="image/*">
                 </div>
                 <div class="camera-icon">
@@ -319,10 +319,10 @@
                 </div>
             </div>
             
-            <div class="profile-name">John Doe</div>
+            <div class="profile-name" id="username_box">John Doe</div>
             <input type="text" class="profile-input" id="nameInput" placeholder="Enter your name">
             
-            <div class="profile-email">john.doe@example.com</div>
+            <div class="profile-email" id="mail_box">john.doe@example.com</div>
             <input type="email" class="profile-input" id="emailInput" placeholder="Enter your email">
         </div> 
         
@@ -352,23 +352,27 @@
                 </div>
             </a>
             
-            <div class="menu-item">
-                <i class="material-icons menu-icon">location_on</i>
-                <div class="menu-text">Location </div>
-                <i class="material-icons chevron">chevron_right</i>
-            </div>
-            
-            <div class="menu-item">
-                <i class="material-icons menu-icon">chat_bubble_outline</i>
-                <div class="menu-text">My Chat</div>
-                <i class="material-icons chevron">chevron_right</i>
-            </div>
+            <a href="location.html" class="menu-item">
+    <i class="material-icons menu-icon">location_on</i>
+    <div class="menu-text">Location</div>
+    <i class="material-icons chevron">chevron_right</i>
+</a>
+
+
             
             <div class="menu-item">
                 <i class="material-icons menu-icon">star_border</i>
                 <div class="menu-text">Rate Your Purchase</div>
                 <i class="material-icons chevron">chevron_right</i>
             </div>
+            
+            <a href="logout.html" class="menu-item" id="logout-btn">
+                <i class="material-icons menu-icon">exit_to_app</i>
+                <div class="menu-text">Logout</div>
+                <i class="material-icons chevron">chevron_right</i>
+            </a>
+            
+            
         </div>
     </div>
     
@@ -417,124 +421,101 @@ function showToast(message = 'Changes saved successfully!') {
     }, 3000);
 }
 
-// Initialize - Load user data
-window.onload = async function() {
-    // Check if user ID exists in localStorage
-    userId = localStorage.getItem('userId');
-    
-    if (userId) {
-        try {
-            await fetchUserData(userId);
-        } catch (error) {
-            console.error("Error fetching user data:", error);
-            // If there's an error fetching user data, create a new user
-            await createNewUser();
-        }
-    } else {
-        // Create a new user if no user ID is found
-        await createNewUser();
-    }
-};
-
-// Fetch user data from MongoDB
-async function fetchUserData(id) {
+async function updateUserDetails(name, email) {
     try {
-        showLoading();
-        const response = await fetch(`${API_URL}/user/${id}`);
-        
-        if (response.ok) {
-            const userData = await response.json();
-            
-            // Update UI with user data
-            profileName.textContent = userData.name || 'Name';
-            profileEmail.textContent = userData.email || 'Email';
-            nameInput.value = userData.name || '';
-            emailInput.value = userData.email || '';
-            
-            if (userData.profilePicture) {
-                // Make sure to handle relative paths correctly
-                profileImage.src = userData.profilePicture.startsWith('http') 
-                    ? userData.profilePicture 
-                    : `http://localhost:5000${userData.profilePicture}`;
-            }
-        } else {
-            // If user not found, create a new one
-            await createNewUser();
-        }
-    } catch (error) {
-        console.error('Error fetching user data:', error);
-        showToast('Error loading user data. Please try again.');
-        throw error; // Propagate error to caller
-    } finally {
-        hideLoading();
-    }
-}
+        showLoading(); // Show loading spinner
 
-// Create a new user in MongoDB
-async function createNewUser() {
-    try {
-        showLoading();
-        const response = await fetch(`${API_URL}/user`, {
-            method: 'POST',
+        // Ensure correct structure
+        const requestBody = {
+            name: String(name),  // Force to string if necessary
+            email: String(email) // Force to string if necessary
+        };
+
+        console.log("Sending data:", requestBody); // Debugging
+
+        const response = await fetch('/api/update-user', {
+            method: 'PUT',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify({
-                name: 'New User',
-                email: 'user@example.com',
-                profilePicture: ''
-            })
+            credentials: 'include', // Ensures cookies are sent
+            body: JSON.stringify(requestBody) // ✅ Send correct JSON structure
         });
-        
+
+        const data = await response.json();
+
         if (response.ok) {
-            const newUser = await response.json();
-            userId = newUser._id;
-            localStorage.setItem('userId', userId);
-            
-            // Update UI with new user data
-            profileName.textContent = newUser.name || 'New User';
-            profileEmail.textContent = newUser.email || 'user@example.com';
-            nameInput.value = newUser.name || 'New User';
-            emailInput.value = newUser.email || 'user@example.com';
-            
-            showToast('New user profile created!');
+            showToast('User details updated successfully!');
+            console.log('Updated User:', data.user);
+            return data.user;
         } else {
-            throw new Error('Failed to create user');
+            showToast(data.message || 'Failed to update user details');
+            console.error('Update Error:', data);
+            return null;
         }
     } catch (error) {
-        console.error('Error creating user:', error);
-        showToast('Error creating user profile. Please try again.');
+        console.error('Error updating user:', error);
+        showToast('An error occurred. Please try again.');
+        return null;
     } finally {
-        hideLoading();
+        hideLoading(); // Hide loader
     }
 }
 
-// Upload profile picture
-async function uploadProfilePicture(file) {
+
+
+
+window.onload = async function () {
     try {
         showLoading();
-        const formData = new FormData();
-        formData.append('profilePicture', file);
-        
-        const response = await fetch(`${API_URL}/upload`, {
-            method: 'POST',
-            body: formData
+
+        const response = await fetch(`${API_URL}/get-user`, {
+            credentials: 'include', // Ensure cookies (token) are sent with the request
         });
-        
-        if (response.ok) {
-            const data = await response.json();
-            return data.filePath;
+
+        if (!response.ok) {
+            if (response.status === 401 || response.status === 403) {
+                showToast('Session expired. Please login again.');
+                location.href = "/login.html"; // Redirect to login
+                return;
+            }
+            throw new Error(`Failed to fetch user data: ${response.statusText}`);
+        }
+
+        const userData = await response.json();
+
+        // Ensure DOM elements exist before updating them
+        if (userData && typeof userData === 'object') {
+
+            console.log(userData);
+            if(!userData.success || !userData.user || typeof userData.user !== "object"){
+                throw "invalid json";
+            }
+
+
+            document.getElementById('username_box').textContent = userData.user.name || 'Name';
+            document.getElementById('mail_box').textContent = userData.user.email || 'Email';
+
+            // Set profile image dynamically
+            document.getElementById('profileImage').src = userData.user.profilePicture || "/uploads/1739862566127.png";
+
+            showToast('Successfully fetched user data');
         } else {
-            throw new Error('Failed to upload image');
+            showToast('Invalid user data received.');
         }
     } catch (error) {
-        console.error('Error uploading profile picture:', error);
-        showToast('Error uploading profile picture. Please try again.');
-        return null;
+        console.log('Error fetching user data:', error);
+        showToast('Error loading user data. Please login again.');
+        location.href = "/login.html"; // Redirect to login
+        return;
     } finally {
         hideLoading();
     }
-}
+};
+
+
+
+
 
 // Update user profile in MongoDB
 async function updateUserProfile(profileData) {
@@ -548,22 +529,25 @@ async function updateUserProfile(profileData) {
             body: JSON.stringify(profileData)
         });
         
-        if (response.ok) {
-            const updatedUser = await response.json();
+        const responseData = await response.json();
+        
+        if (responseData.success) {
             showToast('Profile updated successfully!');
-            return updatedUser;
+            return responseData.user;
         } else {
-            throw new Error('Failed to update profile');
+            // Log the specific error message
+            console.error('Profile Update Error:', responseData.message);
+            showToast(responseData.message || 'Error updating profile. Please try again.');
+            return null;
         }
     } catch (error) {
-        console.error('Error updating profile:', error);
-        showToast('Error updating profile. Please try again.');
+        console.error('Network Error updating profile:', error);
+        showToast('Network error. Please try again.');
         return null;
     } finally {
         hideLoading();
     }
 }
-
 // Edit mode
 editButton.addEventListener('click', function() {
     // Hide display elements, show input fields
@@ -602,26 +586,22 @@ saveButton.addEventListener('click', async function() {
     }
     
     // Update user profile in MongoDB
-    const updatedUser = await updateUserProfile({
-        name,
-        email,
-        profilePicture: profilePicturePath
-    });
+    const updatedUser = await updateUserDetails(name, email);
     
     if (updatedUser) {
         // Update UI
         profileName.textContent = updatedUser.name;
         profileEmail.textContent = updatedUser.email;
         
-        if (updatedUser.profilePicture) {
-            // Ensure proper URL formatting
-            profileImage.src = updatedUser.profilePicture.startsWith('http') 
-                ? updatedUser.profilePicture 
-                : `http://localhost:5000${updatedUser.profilePicture}`;
-        }
+        //if (updatedUser.profilePicture) {
+        //    // Ensure proper URL formatting
+        //    profileImage.src = updatedUser.profilePicture.startsWith('http') 
+        //        ? updatedUser.profilePicture 
+        //        : `http://localhost:5000${updatedUser.profilePicture}`;
+        //}
         
         // Reset image data
-        profileImageData = null;
+        //profileImageData = null;
     }
     
     // Hide input fields, show display elements
